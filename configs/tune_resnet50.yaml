@@ -1,0 +1,21 @@
+# Hyper-parameter search for ResNet-50 fine-tuning.
+# Grid search tries all 3x3 = 9 combinations; random search gets the SAME budget (9 trials)
+# over the same (continuous, log-scale) ranges, so the comparison is fair.
+base_config: configs/cls_resnet50_ft.yaml
+trials: 9
+seed: 0
+overrides:
+  - train.epochs=8                # short runs: we only need to RANK configurations
+  - train.early_stopping_patience=100
+  - train.evaluate_test=false     # never look at the test set while tuning
+space:
+  train.lr:                       # head LR (backbone = lr * 0.1)
+    type: loguniform
+    low: 0.0002
+    high: 0.005
+    grid: [0.0003, 0.001, 0.003]
+  train.weight_decay:
+    type: loguniform
+    low: 0.00001
+    high: 0.01
+    grid: [0.00001, 0.0001, 0.001]

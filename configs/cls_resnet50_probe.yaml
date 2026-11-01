@@ -1,0 +1,19 @@
+# Transfer learning A: frozen ImageNet ResNet-50, only the linear head is trained ("linear probe")
+run_name: resnet50_probe
+model:
+  encoder: resnet50
+  pretrained: true
+  freeze_encoder: true
+  dropout: 0.2
+data:
+  normalization: imagenet       # must match the statistics the backbone was trained with
+  augmentation: light
+  batch_size: 32
+train:
+  epochs: 15
+  lr: 0.003
+  weight_decay: 0.0001
+  warmup_epochs: 1
+  early_stopping_patience: 5
+tracking:
+  tags: [transfer, linear-probe]

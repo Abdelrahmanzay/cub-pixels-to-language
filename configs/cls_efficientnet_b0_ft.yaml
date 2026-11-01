@@ -1,0 +1,22 @@
+# Transfer learning B: full fine-tuning of ImageNet efficientnet_b0 with a smaller backbone LR
+run_name: efficientnet_b0_ft
+model:
+  encoder: efficientnet_b0
+  pretrained: true
+  freeze_encoder: false
+  dropout: 0.2
+data:
+  normalization: imagenet
+  augmentation: standard
+  batch_size: 32                # same batch size on every machine (6 GB GPU is the limit)
+train:
+  epochs: 30
+  optimizer: adamw
+  lr: 0.001                     # head LR
+  backbone_lr_mult: 0.1         # backbone LR = 0.0001
+  weight_decay: 0.0001
+  warmup_epochs: 1
+  label_smoothing: 0.1
+  early_stopping_patience: 8
+tracking:
+  tags: [transfer, fine-tune]

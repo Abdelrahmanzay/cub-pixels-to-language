@@ -1,0 +1,20 @@
+# Baseline: our own residual CNN trained completely from scratch (no pretrained weights)
+run_name: scratch_cnn
+model:
+  encoder: scratch_cnn          # 4 residual stages, widths 64-128-256-512 (~11M params)
+  pretrained: false
+  dropout: 0.3
+data:
+  normalization: cub            # dataset mean/std (computed by `prepare`), not ImageNet's
+  augmentation: standard
+  batch_size: 64
+train:
+  epochs: 80                    # from scratch needs many more epochs than fine-tuning
+  optimizer: adamw
+  lr: 0.002
+  weight_decay: 0.05
+  warmup_epochs: 3
+  label_smoothing: 0.1
+  early_stopping_patience: 20
+tracking:
+  tags: [scratch]
