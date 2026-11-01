@@ -70,3 +70,13 @@ def count_parameters(model: torch.nn.Module) -> tuple[int, int]:
     total = sum(p.numel() for p in model.parameters())
     trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
     return total, trainable
+
+
+def wandb_has_credentials() -> bool:
+    """True if a W&B API key is available (env var or ~/.netrc from `wandb login`)."""
+    import os
+    from pathlib import Path as _P
+    if os.environ.get("WANDB_API_KEY"):
+        return True
+    netrc = _P(os.environ.get("NETRC", _P.home() / ("_netrc" if os.name == "nt" else ".netrc")))
+    return netrc.exists() and "api.wandb.ai" in netrc.read_text(errors="ignore")

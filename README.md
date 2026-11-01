@@ -19,8 +19,8 @@ cd cub-pixels-to-language
 python -m venv .venv
 # Windows: .venv\Scripts\activate      Linux/macOS: source .venv/bin/activate
 
-# 1) PyTorch with CUDA (pick the line for your system from pytorch.org); for CUDA 12.1:
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+# 1) PyTorch with CUDA (pick the line for your system from pytorch.org); for CUDA 12.6 (any recent NVIDIA driver):
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126
 # 2) everything else
 pip install -r requirements.txt
 
@@ -44,6 +44,7 @@ import os; os.environ["WANDB_API_KEY"] = "<your key>"   # or use Kaggle Secrets
 ## 2. Data
 
 ```bash
+python -m src.cli doctor      # checks GPU / CUDA PyTorch / W&B / data
 python -m src.cli prepare     # ~2 min: downloads from Hugging Face, builds data/processed/
 python -m src.cli eda         # ~1 min: figures + summary in outputs/eda/
 ```
@@ -95,7 +96,35 @@ python -m src.cli compare  --runs outputs/runs/*
 
 Trained checkpoints: Google Drive link — *to be added*.
 
-## 4. Project structure
+## 4. Milestone 1 run plan (3 GPUs in parallel)
+
+Do this on **every** machine first:
+
+```bash
+python -m src.cli doctor      # must print "GPU : OK" and end with READY
+python -m src.cli prepare     # once per machine (~2 min)
+```
+
+Training refuses to start on CPU (so nobody wastes hours by accident).
+All runs go to the shared W&B project `cub-pixels-to-language`.
+
+| Machine | Run, in this order |
+|---|---|
+| A: RTX 4060 (8 GB) | `train --config configs/cls_scratch.yaml` → `train --config configs/cls_scratch_plain.yaml` |
+| B: Kaggle GPU | `tune --config configs/tune_resnet50.yaml --method grid` → `tune --config configs/tune_resnet50.yaml --method random` |
+| C: RTX 3060 laptop (6 GB) | `cls_resnet50_probe.yaml` → `cls_resnet50_ft.yaml` → `cls_efficientnet_b0_ft.yaml` → `cls_convnext_tiny_ft.yaml` |
+
+(prefix every command with `python -m src.cli`; machine C: `train --config configs/<file>`)
+
+Then, on one machine with all run folders copied into `outputs/`:
+
+```bash
+python -m src.cli compare --runs outputs/runs/*
+python -m src.cli compare-tuning --dirs outputs/tuning/grid_* outputs/tuning/random_*
+python -m src.cli gradcam --checkpoints outputs/runs/scratch_cnn_*/best.pt outputs/runs/resnet50_ft_*/best.pt --names scratch resnet50-ft
+```
+
+## 5. Project structure
 
 ```
 configs/              experiment + tuning configs (YAML, overridable with --set)
@@ -121,7 +150,7 @@ so the classifier, the M2 U-Net and the M2 caption decoder can swap encoders fro
 config alone. The trainer depends only on the model, dataloaders and a `Tracker`
 interface, so tracking backends can change without touching the training loop.
 
-## 5. Reproducibility
+## 6. Reproducibility
 
 Fixed seeds (`seed: 42`), a stored validation split (`data/processed/metadata.csv`),
 the exact config saved inside every run folder and checkpoint, and the same batch

@@ -1,5 +1,6 @@
 """Command line entry point.
 
+    python -m src.cli doctor
     python -m src.cli prepare
     python -m src.cli eda
     python -m src.cli train    --task classification --config configs/cls_resnet50_ft.yaml [--set train.lr=0.0003 ...]
@@ -25,6 +26,8 @@ def _milestone2(task: str):
 def main(argv=None):
     p = argparse.ArgumentParser(prog="python -m src.cli", description="CUB: pixels to language")
     sub = p.add_subparsers(dest="command", required=True)
+
+    sub.add_parser("doctor", help="check GPU, PyTorch/CUDA, W&B login and prepared data")
 
     s = sub.add_parser("prepare", help="download CUB from Hugging Face and build the local cache + splits")
     s.add_argument("--out", default="data/processed")
@@ -78,7 +81,10 @@ def main(argv=None):
 
     a = p.parse_args(argv)
 
-    if a.command == "prepare":
+    if a.command == "doctor":
+        from src.doctor import run_doctor
+        run_doctor()
+    elif a.command == "prepare":
         from src.data.prepare import prepare_dataset
         prepare_dataset(a.out, a.val_fraction, a.seed, a.limit)
     elif a.command == "eda":
