@@ -80,3 +80,12 @@ def wandb_has_credentials() -> bool:
         return True
     netrc = _P(os.environ.get("NETRC", _P.home() / ("_netrc" if os.name == "nt" else ".netrc")))
     return netrc.exists() and "api.wandb.ai" in netrc.read_text(errors="ignore")
+
+
+def write_markdown(df, path) -> None:
+    """DataFrame -> markdown table (falls back to CSV-style text if `tabulate` is missing)."""
+    try:
+        text = df.to_markdown(index=False, floatfmt=".4f")
+    except ImportError:
+        text = df.to_string(index=False)
+    Path(path).write_text(text, encoding="utf-8")

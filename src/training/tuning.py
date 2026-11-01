@@ -25,6 +25,7 @@ import pandas as pd
 import yaml
 
 from src.config import apply_overrides, load_config, set_by_dotted_key
+from src.utils import write_markdown as _write_markdown
 from src.utils import save_json
 
 
@@ -146,7 +147,7 @@ def compare_searches(dirs: list[str], out_dir: str) -> pd.DataFrame:
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     table.to_csv(out / "tuning_comparison.csv", index=False)
-    (out / "tuning_comparison.md").write_text(table.to_markdown(index=False, floatfmt=".4f"))
+    _write_markdown(table, out / "tuning_comparison.md")
 
     fig, ax = plt.subplots(1, 2, figsize=(12, 4.5))
     for m, r in curves.items():

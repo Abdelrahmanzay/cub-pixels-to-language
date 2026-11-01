@@ -20,6 +20,7 @@ from src.evaluation.metrics import (classification_metrics, confusion, most_conf
 from src.models.classifier import build_classifier, load_classifier
 from src.tracking.trackers import build_tracker
 from src.training.trainer import Trainer
+from src.utils import write_markdown as _write_markdown
 from src.utils import count_parameters, describe_device, get_device, load_json, save_json, seed_everything
 from src.visualization import plots
 from src.visualization.gradcam import GradCAM, gradcam_grid
@@ -197,7 +198,7 @@ def compare_runs(run_dirs: list[str], out_dir: str) -> pd.DataFrame:
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     df.to_csv(out / "comparison.csv", index=False)
-    (out / "comparison.md").write_text(df.to_markdown(index=False, floatfmt=".4f"))
+    _write_markdown(df, out / "comparison.md")
     plots.plot_model_comparison(rows, out / "comparison.png")
     plots.plot_val_curves_overlay(histories, out / "val_curves.png")
     print(df.to_string(index=False))
