@@ -19,6 +19,7 @@ from tqdm import tqdm
 from src.evaluation.metrics import classification_metrics, predict_loader
 from src.models.classifier import Classifier, save_checkpoint
 from src.tracking.trackers import Tracker
+from src.training.losses import build_criterion
 
 
 def build_optimizer(model: Classifier, tcfg: dict) -> torch.optim.Optimizer:
@@ -45,6 +46,21 @@ def build_scheduler(optimizer, tcfg: dict, steps_per_epoch: int):
     return torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)
 
 
+def build_mixing(tcfg: dict, num_classes: int):
+    """Mixup (Zhang et al., 2018) and/or CutMix (Yun et al., 2019) on whole batches.
+    Mixup blends two images and their labels; CutMix pastes a rectangle of one image into another
+    and mixes the labels by area. Both act as strong regularisers on small datasets."""
+    from torchvision.transforms import v2
+    ops = []
+    if float(tcfg.get("mixup_alpha", 0) or 0) > 0:
+        ops.append(v2.MixUp(alpha=float(tcfg["mixup_alpha"]), num_classes=num_classes))
+    if float(tcfg.get("cutmix_alpha", 0) or 0) > 0:
+        ops.append(v2.CutMix(alpha=float(tcfg["cutmix_alpha"]), num_classes=num_classes))
+    if not ops:
+        return None
+    return ops[0] if len(ops) == 1 else v2.RandomChoice(ops)
+
+
 class Trainer:
     def __init__(self, model: Classifier, data, cfg: dict, tracker: Tracker, run_dir: str | Path,
                  device: torch.device):
@@ -59,7 +75,9 @@ class Trainer:
         self.device = device
         self.use_amp = bool(self.tcfg.get("amp", True)) and device.type == "cuda"
         self.scaler = torch.amp.GradScaler("cuda", enabled=self.use_amp)
-        self.criterion = nn.CrossEntropyLoss(label_smoothing=float(self.tcfg.get("label_smoothing", 0.0)))
+        self.criterion = build_criterion(cfg, self.model)
+        self.mix = build_mixing(self.tcfg, len(data.class_names))
+        self.select_last = self.tcfg.get("select", "best_val") == "last"
         steps = len(data.train)
         if self.tcfg.get("max_steps_per_epoch"):
             steps = min(steps, int(self.tcfg["max_steps_per_epoch"]))
@@ -78,11 +96,14 @@ class Trainer:
                 break
             x = x.to(self.device, non_blocking=True)
             y = y.to(self.device, non_blocking=True)
+            target = y
+            if self.mix is not None and torch.rand(1).item() < float(self.tcfg.get("mix_prob", 1.0)):
+                x, target = self.mix(x, y)  # Mixup / CutMix -> soft labels
             if self.device.type == "cuda":
                 x = x.contiguous(memory_format=torch.channels_last)
             with torch.autocast(device_type=self.device.type, dtype=torch.float16, enabled=self.use_amp):
                 logits = self.model(x)
-                loss = self.criterion(logits, y)
+                loss = self.criterion(logits, target)
             self.optimizer.zero_grad(set_to_none=True)
             self.scaler.scale(loss).backward()
             if self.tcfg.get("grad_clip"):
@@ -118,14 +139,19 @@ class Trainer:
             history.append(rec)
             self.tracker.log_metrics(rec, step=epoch)
             improved = val_m["accuracy"] > best_acc
-            if improved:
+            if self.select_last:  # train+val retrain: val is not held out, keep the final epoch
+                save_checkpoint(self.best_ckpt, self.model, self.cfg, self.data.class_names,
+                                {"epoch": epoch, "val_acc": val_m["accuracy"]})
+            if improved and not self.select_last:
                 best_acc, best_epoch = val_m["accuracy"], epoch
                 save_checkpoint(self.best_ckpt, self.model, self.cfg, self.data.class_names,
                                 {"epoch": epoch, "val_acc": best_acc})
             print(f"[epoch {epoch:3d}] train_loss={rec['train_loss']:.3f} train_acc={rec['train_acc']:.3f} "
                   f"val_loss={rec['val_loss']:.3f} val_acc={rec['val_acc']:.3f} "
                   f"({rec['epoch_time_s']:.1f}s){' *' if improved else ''}")
-            if epoch - best_epoch >= patience:
+            if improved and self.select_last:
+                best_acc, best_epoch = val_m["accuracy"], epoch
+            if epoch - best_epoch >= patience and not self.select_last:
                 print(f"Early stopping: no val improvement for {patience} epochs.")
                 break
         summary = {"best_val_acc": best_acc, "best_epoch": best_epoch, "epochs_ran": len(history),
