@@ -1,0 +1,44 @@
+seed: 42
+task: classification
+run_name: scratch_cnn_plain
+output_dir: outputs/runs
+data:
+  root: data/processed
+  image_size: 224
+  batch_size: 64
+  num_workers: 4
+  normalization: cub
+  augmentation: standard
+model:
+  encoder: scratch_cnn_plain
+  pretrained: false
+  freeze_encoder: false
+  dropout: 0.3
+  encoder_kwargs: {}
+train:
+  epochs: 40
+  optimizer: adamw
+  lr: 0.002
+  backbone_lr_mult: 0.1
+  weight_decay: 0.05
+  momentum: 0.9
+  scheduler: cosine
+  warmup_epochs: 3
+  label_smoothing: 0.1
+  amp: true
+  grad_clip: null
+  early_stopping_patience: 15
+  max_steps_per_epoch: null
+  evaluate_test: true
+  allow_cpu: false
+tracking:
+  backends:
+  - local
+  - wandb
+  project: cub-pixels-to-language
+  entity: abdrahmanzayed-ain-shams-university
+  mode: online
+  group: null
+  tags:
+  - scratch
+  - ablation
