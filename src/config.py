@@ -52,7 +52,7 @@ DEFAULTS: dict[str, Any] = {
     "tracking": {
         "backends": ["local", "wandb"],
         "project": "cub-pixels-to-language",
-        "entity": "abdrahmanzayed-ain-shams-university",
+        "entity": "23p0094-ain-shams-university",
         "mode": "online",  # online | offline | disabled
         "group": None,
         "tags": [],
