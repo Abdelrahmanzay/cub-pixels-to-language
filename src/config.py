@@ -47,11 +47,12 @@ DEFAULTS: dict[str, Any] = {
         "early_stopping_patience": 10,
         "max_steps_per_epoch": None,  # for quick smoke tests
         "evaluate_test": True,
+        "allow_cpu": False,  # refuse to train on CPU by accident (smoke tests: set true)
     },
     "tracking": {
         "backends": ["local", "wandb"],
         "project": "cub-pixels-to-language",
-        "entity": None,
+        "entity": "abdrahmanzayed-ain-shams-university",
         "mode": "online",  # online | offline | disabled
         "group": None,
         "tags": [],

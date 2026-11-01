@@ -12,10 +12,11 @@ without touching the training loop (dependency inversion).
 from __future__ import annotations
 
 import json
-import os
 import warnings
 from abc import ABC, abstractmethod
 from pathlib import Path
+
+from src.utils import wandb_has_credentials
 
 
 class Tracker(ABC):
@@ -62,7 +63,7 @@ class WandbTracker(Tracker):
             warnings.warn("wandb not installed -> W&B tracking disabled")
             self.run = None
             return
-        if mode == "online" and not (os.environ.get("WANDB_API_KEY") or _wandb_logged_in()):
+        if mode == "online" and not wandb_has_credentials():
             warnings.warn("Not logged in to W&B (run `wandb login`). Logging OFFLINE; "
                           "upload later with `wandb sync <run_dir>/wandb/offline-run-*`.")
             mode = "offline"
@@ -93,14 +94,6 @@ class WandbTracker(Tracker):
     def finish(self):
         if self.run:
             self.run.finish()
-
-
-def _wandb_logged_in() -> bool:
-    try:
-        import wandb
-        return bool(wandb.api.api_key)
-    except Exception:
-        return False
 
 
 class CompositeTracker(Tracker):

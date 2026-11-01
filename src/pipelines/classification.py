@@ -36,6 +36,12 @@ def make_run_dir(cfg: dict) -> tuple[Path, str]:
 def train_classification(cfg: dict) -> dict:
     seed_everything(int(cfg["seed"]))
     device = get_device()
+    if device.type == "cpu" and not cfg["train"].get("allow_cpu", False):
+        raise SystemExit(
+            "No CUDA GPU visible to PyTorch -> refusing to train on CPU.\n"
+            "Fix: run `python -m src.cli doctor`, and install the CUDA build of PyTorch, e.g.\n"
+            "  pip install --force-reinstall torch torchvision --index-url https://download.pytorch.org/whl/cu126\n"
+            "(For a quick CPU smoke test add: --set train.allow_cpu=true)")
     run_dir, run_name = make_run_dir(cfg)
     save_config(cfg, run_dir / "config.yaml")
     data = build_classification_data(cfg)
