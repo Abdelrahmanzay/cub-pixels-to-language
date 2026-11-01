@@ -1,0 +1,5 @@
+# ConvNeXt-T fine-tune on images cropped to the bird (bounding box) - 224 px
+extends: ../cls_convnext_tiny_ft.yaml
+run_name: convnext_bbox
+data: {root: data/processed_hr, crop: bbox}
+tracking: {tags: [improve, bbox]}

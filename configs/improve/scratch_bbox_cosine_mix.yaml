@@ -1,0 +1,6 @@
+# scratch CNN, bird crops, cosine loss, Mixup/CutMix, 150 epochs (all scratch improvements)
+extends: ../cls_scratch.yaml
+run_name: scratch_bbox_cosine_mix
+data: {root: data/processed_hr, crop: bbox}
+train: {loss: cosine, label_smoothing: 0.0, mixup_alpha: 0.2, cutmix_alpha: 1.0, mix_prob: 0.8, epochs: 150, early_stopping_patience: 40}
+tracking: {tags: [improve, scratch, bbox, cosine, mixup-cutmix]}

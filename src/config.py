@@ -23,7 +23,10 @@ DEFAULTS: dict[str, Any] = {
         "batch_size": 64,
         "num_workers": 4,
         "normalization": "imagenet",  # imagenet | cub
-        "augmentation": "standard",  # none | light | standard | strong
+        "augmentation": "standard",  # none | light | standard | strong | randaugment | trivialaugment
+        "crop": "none",  # none | bbox  (crop every image to the bird bounding box)
+        "bbox_margin": 0.15,  # padding around the box, as a fraction of its size
+        "train_on_val": False,  # final retrain on train + val
     },
     "model": {
         "encoder": "resnet50",
@@ -31,6 +34,7 @@ DEFAULTS: dict[str, Any] = {
         "freeze_encoder": False,
         "dropout": 0.2,
         "encoder_kwargs": {},
+        "cosine_scale": 16.0,  # only used with train.loss=cosine
     },
     "train": {
         "epochs": 30,
@@ -47,7 +51,14 @@ DEFAULTS: dict[str, Any] = {
         "early_stopping_patience": 10,
         "max_steps_per_epoch": None,  # for quick smoke tests
         "evaluate_test": True,
-        "allow_cpu": False,  # refuse to train on CPU by accident (smoke tests: set true)
+        "allow_cpu": False,
+        "loss": "ce",  # ce | cosine
+        "cosine_xent_weight": 0.1,
+        "mixup_alpha": 0.0,  # > 0 enables Mixup
+        "cutmix_alpha": 0.0,  # > 0 enables CutMix (both > 0: one of them per batch)
+        "mix_prob": 1.0,  # fraction of batches that get mixed
+        "select": "best_val",  # best_val | last (use "last" when training on train + val)
+        "tta": True,  # also report test metrics with horizontal-flip test-time augmentation  # refuse to train on CPU by accident (smoke tests: set true)
     },
     "tracking": {
         "backends": ["local", "wandb"],
@@ -115,13 +126,22 @@ def apply_overrides(cfg: dict, overrides: list[str] | None) -> dict:
 def load_config(path: str | Path | None, overrides: list[str] | None = None) -> dict:
     cfg = copy.deepcopy(DEFAULTS)
     if path:
-        with open(path, "r", encoding="utf-8") as f:
-            user_cfg = yaml.safe_load(f) or {}
-        user_cfg.pop("base_config", None)
-        cfg = deep_merge(cfg, user_cfg)
+        cfg = deep_merge(cfg, _read_with_bases(path))
     cfg = apply_overrides(cfg, overrides)
     _coerce_numbers(cfg)
     return cfg
+
+
+def _read_with_bases(path) -> dict:
+    """Read a YAML config; ``extends: other.yaml`` (relative to this file) is loaded first,
+    so an experiment file only needs the keys it changes."""
+    with open(path, "r", encoding="utf-8") as f:
+        user_cfg = yaml.safe_load(f) or {}
+    user_cfg.pop("base_config", None)  # used by tuning configs, not a model config
+    parent = user_cfg.pop("extends", None)
+    if parent:
+        return deep_merge(_read_with_bases(Path(path).parent / parent), user_cfg)
+    return user_cfg
 
 
 def _coerce_numbers(cfg: dict) -> None:

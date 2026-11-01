@@ -1,0 +1,6 @@
+# ConvNeXt-T, bird crop, cosine loss (+0.1 cross-entropy) instead of cross-entropy
+extends: ../cls_convnext_tiny_ft.yaml
+run_name: convnext_bbox_cosine
+data: {root: data/processed_hr, crop: bbox}
+train: {loss: cosine, label_smoothing: 0.0}
+tracking: {tags: [improve, bbox, cosine]}

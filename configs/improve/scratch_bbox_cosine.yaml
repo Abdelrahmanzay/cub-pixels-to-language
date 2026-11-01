@@ -1,0 +1,6 @@
+# scratch CNN, bird crops, cosine loss (Barz & Denzler 2020: designed for small datasets from scratch)
+extends: ../cls_scratch.yaml
+run_name: scratch_bbox_cosine
+data: {root: data/processed_hr, crop: bbox}
+train: {loss: cosine, label_smoothing: 0.0}
+tracking: {tags: [improve, scratch, bbox, cosine]}
