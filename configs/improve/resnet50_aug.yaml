@@ -1,0 +1,7 @@
+# augmentation / loss ablation base: ResNet-50 fine-tune, full image, 224 px
+# vary with: --set data.augmentation=none|light|standard|strong|randaugment|trivialaugment
+#            --set train.mixup_alpha=0.2 train.cutmix_alpha=1.0   |   --set train.loss=cosine train.label_smoothing=0
+extends: ../cls_resnet50_ft.yaml
+run_name: r50_aug
+data: {root: data/processed_hr}
+tracking: {tags: [improve, ablation]}

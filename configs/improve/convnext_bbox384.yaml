@@ -1,0 +1,5 @@
+# ConvNeXt-T fine-tune, bird crop + 384 px (crop and resolution together)
+extends: ../cls_convnext_tiny_ft.yaml
+run_name: convnext_bbox384
+data: {root: data/processed_hr, crop: bbox, image_size: 384}
+tracking: {tags: [improve, bbox, resolution]}

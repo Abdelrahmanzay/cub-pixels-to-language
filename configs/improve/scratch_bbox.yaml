@@ -1,0 +1,5 @@
+# our scratch CNN on bird crops
+extends: ../cls_scratch.yaml
+run_name: scratch_bbox
+data: {root: data/processed_hr, crop: bbox}
+tracking: {tags: [improve, scratch, bbox]}

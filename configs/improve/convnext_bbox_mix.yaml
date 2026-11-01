@@ -1,0 +1,6 @@
+# ConvNeXt-T, bird crop, Mixup/CutMix regularisation, 40 epochs (mixing needs longer training)
+extends: ../cls_convnext_tiny_ft.yaml
+run_name: convnext_bbox_mix
+data: {root: data/processed_hr, crop: bbox}
+train: {mixup_alpha: 0.2, cutmix_alpha: 1.0, mix_prob: 0.8, epochs: 40, early_stopping_patience: 12}
+tracking: {tags: [improve, bbox, mixup-cutmix]}
