@@ -62,6 +62,10 @@ def train_classification(cfg: dict) -> dict:
     if cfg["train"].get("evaluate_test", True):
         test = evaluate_checkpoint(trainer.best_ckpt, split="test", out_dir=run_dir, data=data)
         tracker.log_summary({f"test_{k}": v for k, v in test["metrics"].items()})
+        if cfg["train"].get("tta", True):
+            tta = evaluate_checkpoint(trainer.best_ckpt, split="test", out_dir=run_dir, data=data, tta=True)
+            tracker.log_summary({f"test_tta_{k}": v for k, v in tta["metrics"].items()})
+            result["test_metrics_tta"] = tta["metrics"]
         for img in ("confusion_matrix.png", "confused_pairs.png", "per_class_accuracy.png"):
             if (run_dir / img).exists():
                 tracker.log_image(img.replace(".png", ""), run_dir / img)
@@ -73,7 +77,7 @@ def train_classification(cfg: dict) -> dict:
 
 
 def evaluate_checkpoint(ckpt_path, split: str = "test", out_dir=None, data=None, batch_size: int = 64,
-                        num_workers: int = 2) -> dict:
+                        num_workers: int = 2, tta: bool = False) -> dict:
     device = get_device()
     model, ckpt = load_classifier(ckpt_path, device)
     cfg = ckpt["config"]
@@ -85,10 +89,17 @@ def evaluate_checkpoint(ckpt_path, split: str = "test", out_dir=None, data=None,
     if split == "train":  # evaluate train images WITHOUT augmentation
         loader = torch.utils.data.DataLoader(
             CubClassificationDataset(data.frames["train"], cfg["data"]["root"],
-                                     build_eval_transform(cfg["data"]["image_size"], data.mean, data.std)),
+                                     build_eval_transform(cfg["data"]["image_size"], data.mean, data.std),
+                                     **data.crop),
             batch_size=loader.batch_size, num_workers=num_workers)
-    logits, labels, idx = predict_loader(model, loader, device)
+    logits, labels, idx = predict_loader(model, loader, device, tta=tta)
     metrics = classification_metrics(logits, labels, len(class_names))
+    if tta:  # only the headline metrics; the plain run already wrote the detailed files
+        out_dir = Path(out_dir or Path(ckpt_path).parent)
+        save_json({"split": split, "checkpoint": str(ckpt_path), "tta": "hflip", "metrics": metrics},
+                  out_dir / f"{split}_metrics_tta.json")
+        print(f"[{split} +TTA] " + " | ".join(f"{k}={v:.4f}" for k, v in metrics.items()))
+        return {"metrics": metrics}
     cm = confusion(logits, labels, len(class_names))
     pairs = most_confused_pairs(cm, class_names)
     per_class = per_class_accuracy(cm, class_names)
@@ -137,6 +148,8 @@ def run_gradcam(ckpt_paths: list[str], out_dir: str, n_correct: int = 6, n_wrong
     class_names = loaded[0][1]["class_names"]
     root = cfg0["data"]["root"]
     df = load_metadata(root)
+    if "drop" in df.columns:
+        df = df[~df["drop"].astype(bool)]
     test_df = df[df["split"] == "test"].reset_index(drop=True)
     mean, std = get_normalization("imagenet", root)  # display only
 
@@ -160,7 +173,8 @@ def run_gradcam(ckpt_paths: list[str], out_dir: str, n_correct: int = 6, n_wrong
             c = ckpt["config"]
             m_mean, m_std = get_normalization(c["data"]["normalization"], root)
             tf = build_eval_transform(c["data"]["image_size"], m_mean, m_std)
-            ds = CubClassificationDataset(test_df.iloc[rows["row"].values], root, tf)
+            crop = dict(crop=c["data"].get("crop", "none"), bbox_margin=float(c["data"].get("bbox_margin", 0.15)))
+            ds = CubClassificationDataset(test_df.iloc[rows["row"].values], root, tf, **crop)
             x = torch.stack([ds[i][0] for i in range(len(ds))]).to(device)
             cam = GradCAM(model, model.encoder.gradcam_layer)
             cams, logits = cam(x)
@@ -170,7 +184,7 @@ def run_gradcam(ckpt_paths: list[str], out_dir: str, n_correct: int = 6, n_wrong
                                "conf": probs.max(1).values.tolist()})
             if display is None:
                 dtf = build_eval_transform(c["data"]["image_size"], mean, std)
-                dds = CubClassificationDataset(test_df.iloc[rows["row"].values], root, dtf)
+                dds = CubClassificationDataset(test_df.iloc[rows["row"].values], root, dtf, **crop)
                 display = torch.stack([dds[i][0] for i in range(len(dds))])
         path = Path(out_dir) / f"gradcam_{kind}.png"
         gradcam_grid(display, rows["label"].tolist(), model_outs, class_names, mean, std, path,
@@ -191,7 +205,8 @@ def compare_runs(run_dirs: list[str], out_dir: str) -> pd.DataFrame:
         tr = load_json(rd / "train_result.json")
         summ = load_json(rd / "summary.json") if (rd / "summary.json").exists() else {}
         name = rd.name.rsplit("_", 1)[0]
-        rows.append({"run": name, **m, "best_val_acc": tr["best_val_acc"], "epochs": tr["epochs_ran"],
+        tta_acc = load_json(rd / "test_metrics_tta.json")["metrics"]["accuracy"] if (rd / "test_metrics_tta.json").exists() else None
+        rows.append({"run": name, **m, "accuracy_tta": tta_acc, "best_val_acc": tr["best_val_acc"], "epochs": tr["epochs_ran"],
                      "train_time_min": tr["train_time_s"] / 60, "params_M": summ.get("params_total", 0) / 1e6})
         histories[name] = tr["history"]
     df = pd.DataFrame(rows)

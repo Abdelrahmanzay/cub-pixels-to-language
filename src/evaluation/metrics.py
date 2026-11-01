@@ -17,7 +17,9 @@ from sklearn.metrics import (accuracy_score, balanced_accuracy_score, confusion_
 
 
 @torch.no_grad()
-def predict_loader(model, loader, device, amp: bool = True):
+def predict_loader(model, loader, device, amp: bool = True, tta: bool = False):
+    """Logits for a whole loader. ``tta=True`` averages the softmax of the image and its
+    horizontal mirror (test-time augmentation) and returns log-probabilities."""
     model.eval()
     logits_all, labels_all, idx_all = [], [], []
     use_amp = amp and device.type == "cuda"
@@ -25,6 +27,9 @@ def predict_loader(model, loader, device, amp: bool = True):
         x = x.to(device, non_blocking=True)
         with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=use_amp):
             logits = model(x)
+            if tta:
+                p = (logits.float().softmax(1) + model(torch.flip(x, dims=[3])).float().softmax(1)) / 2
+                logits = p.clamp_min(1e-8).log()
         logits_all.append(logits.float().cpu())
         labels_all.append(y)
         idx_all.append(idx)
