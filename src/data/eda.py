@@ -391,6 +391,37 @@ def colorization_pairs(df, root, out, seed=1):
     return _save(fig, out, "13_colorization_pairs.png")
 
 
+def bird_crop_analysis(df, root, out, seed=4):
+    """How much of each image is bird? + examples of the bounding-box crop used as preprocessing."""
+    from src.data.datasets import crop_to_bird
+    if "bbox_w" not in df.columns:
+        return None, {}
+    frac = (df.bbox_w * df.bbox_h) / (df.orig_width * df.orig_height)
+    rows = df[df.split == "train"].sample(5, random_state=seed)
+    fig = plt.figure(figsize=(15, 7.5))
+    ax0 = fig.add_subplot(2, 6, (1, 7))
+    ax0.hist(frac, bins=50, color="#4f81bd")
+    ax0.axvline(frac.median(), color="r", ls="--", label=f"median {frac.median():.2f}")
+    ax0.set(xlabel="bird box area / image area", ylabel="# images", title="How much of the image is bird?")
+    ax0.legend()
+    for k, (_, r) in enumerate(rows.iterrows()):
+        img = Image.open(root / r.path).convert("RGB")
+        s = img.width / r.orig_width
+        a = fig.add_subplot(2, 6, 2 + k)
+        a.imshow(img)
+        a.add_patch(plt.Rectangle((r.bbox_x * s, r.bbox_y * s), r.bbox_w * s, r.bbox_h * s, fill=False, ec="red", lw=2))
+        a.set_title(r.class_name[:22], fontsize=8)
+        a.axis("off")
+        b = fig.add_subplot(2, 6, 8 + k)
+        b.imshow(crop_to_bird(img, r))
+        b.set_title("bird crop (15% margin)", fontsize=8)
+        b.axis("off")
+    fig.suptitle("Bounding-box crop preprocessing: most of every image is background")
+    stats = {"bird_area_fraction": frac.describe().round(3).to_dict(),
+             "images_bird_under_20pct": int((frac < 0.2).sum())}
+    return _save(fig, out, "14_bird_crop.png"), stats
+
+
 # --------------------------------------------------------------------------- #
 def run_eda(data_root: str = "data/processed", out_dir: str = "outputs/eda") -> dict:
     root, out = Path(data_root), Path(out_dir)
@@ -410,6 +441,7 @@ def run_eda(data_root: str = "data/processed", out_dir: str = "outputs/eda") -> 
     summary["caption_cleaning_examples"] = caption_cleaning_examples(df)
     figs.append(augmentation_examples(df, root, fig_dir))
     figs.append(colorization_pairs(df, root, fig_dir))
+    f, summary["bird_crop"] = bird_crop_analysis(df, root, fig_dir); figs.append(f)
     summary["figures"] = [f for f in figs if f]
     save_json(summary, out / "eda_summary.json")
     print(json.dumps({k: v for k, v in summary.items() if k not in ("captions", "duplicates")}, indent=1, default=str)[:3000])
