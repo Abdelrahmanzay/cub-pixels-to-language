@@ -53,6 +53,14 @@ def build_train_transform(level: str, size: int, mean, std) -> T.Compose:
                T.RandomAffine(degrees=20, translate=(0.1, 0.1), scale=(0.9, 1.1)),
                T.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.15, hue=0.0)]
         return T.Compose(aug + _to_tensor(mean, std) + [T.RandomErasing(p=0.4, scale=(0.02, 0.2))])
+    if level == "randaugment":  # automated policy (Cubuk et al., 2020); note: it includes colour ops
+        aug = [T.RandomResizedCrop(size, scale=(0.35, 1.0), antialias=True), T.RandomHorizontalFlip(),
+               T.RandAugment(num_ops=2, magnitude=9)]
+        return T.Compose(aug + _to_tensor(mean, std) + [T.RandomErasing(p=0.25, scale=(0.02, 0.15))])
+    if level == "trivialaugment":  # parameter-free policy (Mueller & Hutter, 2021)
+        aug = [T.RandomResizedCrop(size, scale=(0.35, 1.0), antialias=True), T.RandomHorizontalFlip(),
+               T.TrivialAugmentWide()]
+        return T.Compose(aug + _to_tensor(mean, std) + [T.RandomErasing(p=0.25, scale=(0.02, 0.15))])
     raise ValueError(f"Unknown augmentation level: {level}")
 
 
