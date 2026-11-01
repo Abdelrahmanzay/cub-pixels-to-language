@@ -1,0 +1,727 @@
+{
+  "n_images": 11788,
+  "split_sizes": {
+    "test": 5794,
+    "train": 5394,
+    "val": 600
+  },
+  "n_classes": 200,
+  "train_channel_stats": {
+    "mean": [
+      0.4849,
+      0.4988,
+      0.4324
+    ],
+    "std": [
+      0.2295,
+      0.225,
+      0.2627
+    ]
+  },
+  "class_distribution": {
+    "train": {
+      "min": 26,
+      "max": 27,
+      "mean": 26.97,
+      "imbalance_ratio_max_over_min": 1.0384615384615385
+    },
+    "val": {
+      "min": 3,
+      "max": 3,
+      "mean": 3.0,
+      "imbalance_ratio_max_over_min": 1.0
+    },
+    "test": {
+      "min": 11,
+      "max": 30,
+      "mean": 28.97,
+      "imbalance_ratio_max_over_min": 2.727272727272727
+    },
+    "smallest_test_classes": {
+      "Least Auklet": 11,
+      "Crested Auklet": 14,
+      "Spotted Catbird": 15,
+      "Rhinoceros Auklet": 18,
+      "Whip poor Will": 19,
+      "Baird Sparrow": 20,
+      "Slaty backed Gull": 20,
+      "White Pelican": 20
+    }
+  },
+  "family_groups": {
+    "Warbler": 25,
+    "Sparrow": 21,
+    "Gull": 8,
+    "Flycatcher": 7,
+    "Tern": 7,
+    "Wren": 7,
+    "Vireo": 7,
+    "Woodpecker": 6,
+    "Kingfisher": 5,
+    "Oriole": 4,
+    "Swallow": 4,
+    "Grosbeak": 4,
+    "Blackbird": 4,
+    "Auklet": 4,
+    "Grebe": 4,
+    "Hummingbird": 3,
+    "Cuckoo": 3,
+    "Albatross": 3,
+    "Jay": 3,
+    "Cormorant": 3,
+    "Bunting": 3
+  },
+  "image_sizes": {
+    "width": {
+      "count": 11788.0,
+      "mean": 467.9,
+      "std": 63.9,
+      "min": 121.0,
+      "25%": 495.0,
+      "50%": 500.0,
+      "75%": 500.0,
+      "max": 500.0
+    },
+    "height": {
+      "count": 11788.0,
+      "mean": 386.0,
+      "std": 70.9,
+      "min": 120.0,
+      "25%": 333.0,
+      "50%": 375.0,
+      "75%": 434.0,
+      "max": 500.0
+    },
+    "aspect_ratio": {
+      "count": 11788.0,
+      "mean": 1.257,
+      "std": 0.289,
+      "min": 0.375,
+      "25%": 1.081,
+      "50%": 1.333,
+      "75%": 1.497,
+      "max": 3.597
+    },
+    "n_short_side_below_224": 148,
+    "n_unique_sizes": 1152,
+    "modes": {
+      "RGB": 11780,
+      "L": 8
+    }
+  },
+  "image_statistics": {
+    "brightness": {
+      "count": 11788.0,
+      "mean": 120.48,
+      "std": 33.29,
+      "min": 19.25,
+      "25%": 98.24,
+      "50%": 118.72,
+      "75%": 141.2,
+      "max": 244.95
+    },
+    "contrast": {
+      "count": 11788.0,
+      "mean": 43.22,
+      "std": 14.22,
+      "min": 7.58,
+      "25%": 32.83,
+      "50%": 42.0,
+      "75%": 52.12,
+      "max": 104.78
+    },
+    "colorfulness": {
+      "count": 11788.0,
+      "mean": 35.9,
+      "std": 18.14,
+      "min": 0.0,
+      "25%": 22.37,
+      "50%": 33.44,
+      "75%": 46.85,
+      "max": 129.54
+    },
+    "sharpness": {
+      "count": 11788.0,
+      "mean": 1531.4,
+      "std": 1254.44,
+      "min": 38.3,
+      "25%": 723.3,
+      "50%": 1168.13,
+      "75%": 1919.24,
+      "max": 16243.41
+    }
+  },
+  "grayscale_images": [
+    {
+      "split": "train",
+      "class_name": "Pelagic Cormorant",
+      "file_name": "Pelagic_Cormorant_0022_23802.jpg",
+      "orig_mode": "L"
+    },
+    {
+      "split": "train",
+      "class_name": "Ivory Gull",
+      "file_name": "Ivory_Gull_0040_49180.jpg",
+      "orig_mode": "L"
+    },
+    {
+      "split": "train",
+      "class_name": "Western Gull",
+      "file_name": "Western_Gull_0002_54825.jpg",
+      "orig_mode": "L"
+    },
+    {
+      "split": "train",
+      "class_name": "Clark Nutcracker",
+      "file_name": "Clark_Nutcracker_0020_85099.jpg",
+      "orig_mode": "L"
+    },
+    {
+      "split": "test",
+      "class_name": "Brewer Blackbird",
+      "file_name": "Brewer_Blackbird_0028_2682.jpg",
+      "orig_mode": "L"
+    },
+    {
+      "split": "test",
+      "class_name": "Ivory Gull",
+      "file_name": "Ivory_Gull_0085_49456.jpg",
+      "orig_mode": "L"
+    },
+    {
+      "split": "test",
+      "class_name": "Mallard",
+      "file_name": "Mallard_0130_76836.jpg",
+      "orig_mode": "L"
+    },
+    {
+      "split": "test",
+      "class_name": "White necked Raven",
+      "file_name": "White_Necked_Raven_0070_102645.jpg",
+      "orig_mode": "L"
+    }
+  ],
+  "duplicates": {
+    "exact_duplicate_images": 2,
+    "exact_duplicate_files": [
+      {
+        "split": "train",
+        "file_name": "Pigeon_Guillemot_0018_40195.jpg",
+        "class_name": "Pigeon Guillemot"
+      },
+      {
+        "split": "train",
+        "file_name": "Pigeon_Guillemot_0081_40339.jpg",
+        "class_name": "Pigeon Guillemot"
+      }
+    ],
+    "candidate_pairs_hamming_le_4": 12,
+    "true_duplicate_pairs_hamming_le_2": 8,
+    "dropped_by_prepare": [
+      {
+        "split": "val",
+        "file_name": "Bronzed_Cowbird_0074_24045.jpg",
+        "duplicate_of": "Bronzed_Cowbird_0025_796213.jpg"
+      },
+      {
+        "split": "train",
+        "file_name": "Pigeon_Guillemot_0081_40339.jpg",
+        "duplicate_of": "Pigeon_Guillemot_0018_40195.jpg"
+      },
+      {
+        "split": "val",
+        "file_name": "Prothonotary_Warbler_0020_174122.jpg",
+        "duplicate_of": "Prothonotary_Warbler_0105_174097.jpg"
+      },
+      {
+        "split": "train",
+        "file_name": "Swainson_Warbler_0049_794880.jpg",
+        "duplicate_of": "Swainson_Warbler_0022_794868.jpg"
+      }
+    ],
+    "pairs_across_splits": 4,
+    "true_duplicates_different_class": 1,
+    "near_duplicates": [
+      {
+        "a": "Bobolink_0001_9261.jpg",
+        "a_split": "train",
+        "b": "Red_Winged_Blackbird_0009_5841.jpg",
+        "b_split": "test",
+        "same_class": false,
+        "hamming": 4
+      },
+      {
+        "a": "Bronzed_Cowbird_0074_24045.jpg",
+        "a_split": "val",
+        "b": "Bronzed_Cowbird_0025_796213.jpg",
+        "b_split": "test",
+        "same_class": true,
+        "hamming": 0
+      },
+      {
+        "a": "Pigeon_Guillemot_0018_40195.jpg",
+        "a_split": "train",
+        "b": "Pigeon_Guillemot_0081_40339.jpg",
+        "b_split": "train",
+        "same_class": true,
+        "hamming": 0
+      },
+      {
+        "a": "Horned_Lark_0049_74574.jpg",
+        "a_split": "train",
+        "b": "Caspian_Tern_0115_145927.jpg",
+        "b_split": "test",
+        "same_class": false,
+        "hamming": 4
+      },
+      {
+        "a": "Prothonotary_Warbler_0020_174122.jpg",
+        "a_split": "val",
+        "b": "Prothonotary_Warbler_0105_174097.jpg",
+        "b_split": "test",
+        "same_class": true,
+        "hamming": 0
+      },
+      {
+        "a": "Swainson_Warbler_0022_794868.jpg",
+        "a_split": "train",
+        "b": "Swainson_Warbler_0049_794880.jpg",
+        "b_split": "train",
+        "same_class": true,
+        "hamming": 0
+      },
+      {
+        "a": "Chuck_Will_Widow_0042_796983.jpg",
+        "a_split": "test",
+        "b": "Whip_Poor_Will_0002_796427.jpg",
+        "b_split": "test",
+        "same_class": false,
+        "hamming": 0
+      },
+      {
+        "a": "Black_Billed_Cuckoo_0043_795324.jpg",
+        "a_split": "test",
+        "b": "Black_Billed_Cuckoo_0089_795322.jpg",
+        "b_split": "test",
+        "same_class": true,
+        "hamming": 4
+      },
+      {
+        "a": "Ivory_Gull_0101_49790.jpg",
+        "a_split": "test",
+        "b": "Ringed_Kingfisher_0101_72919.jpg",
+        "b_split": "test",
+        "same_class": false,
+        "hamming": 4
+      },
+      {
+        "a": "Red_Legged_Kittiwake_0020_795439.jpg",
+        "a_split": "test",
+        "b": "Red_Legged_Kittiwake_0042_795457.jpg",
+        "b_split": "test",
+        "same_class": true,
+        "hamming": 0
+      },
+      {
+        "a": "Brewer_Sparrow_0037_107442.jpg",
+        "a_split": "test",
+        "b": "Brewer_Sparrow_0065_107419.jpg",
+        "b_split": "test",
+        "same_class": true,
+        "hamming": 2
+      },
+      {
+        "a": "Summer_Tanager_0047_140164.jpg",
+        "a_split": "test",
+        "b": "Summer_Tanager_0124_139963.jpg",
+        "b_split": "test",
+        "same_class": true,
+        "hamming": 0
+      }
+    ]
+  },
+  "captions": {
+    "raw_lines_per_description": {
+      "11": 11788
+    },
+    "empty_lines_total": 11788,
+    "images_with_fewer_than_10_nonempty_lines": 0,
+    "duplicate_captions_within_image_removed": 1306,
+    "images_with_duplicate_captions": 1183,
+    "captions_after_cleaning": 116574,
+    "captions_per_image": {
+      "7": 4,
+      "8": 115,
+      "9": 1064,
+      "10": 10605
+    },
+    "lines_with_uppercase": 0,
+    "non_ascii_characters": {
+      "'\ufffd'": 1700
+    },
+    "words_per_caption": {
+      "count": 116574.0,
+      "mean": 15.31,
+      "std": 4.68,
+      "min": 1.0,
+      "25%": 12.0,
+      "50%": 14.0,
+      "75%": 17.0,
+      "max": 66.0
+    },
+    "words_per_caption_p95": 24.0,
+    "words_per_caption_p99": 32.0,
+    "vocab_size_train_val": 4078,
+    "vocab_size_by_min_freq": {
+      "1": 4078,
+      "2": 2206,
+      "3": 1637,
+      "5": 1243,
+      "10": 879,
+      "20": 619,
+      "50": 392
+    },
+    "token_coverage_by_min_freq": {
+      "1": 1.0,
+      "2": 0.9979,
+      "3": 0.9967,
+      "5": 0.9952,
+      "10": 0.9925,
+      "20": 0.9886,
+      "50": 0.981
+    },
+    "singleton_words": 1872,
+    "likely_typos_rare_unknown_words": 679,
+    "likely_typo_token_share": 0.00086,
+    "typo_corrections_examples": {
+      "aa": "a",
+      "aalso": "also",
+      "aare": "are",
+      "abd": "and",
+      "abdobmen": "abdomen",
+      "abdomenal": "abdominal",
+      "abdomend": "abdomen",
+      "abdoment": "abdomen",
+      "abdomin": "abdomen",
+      "abdomon": "abdomen",
+      "ablack": "black",
+      "abright": "bright",
+      "abrown": "brown",
+      "absomen": "abdomen",
+      "ack": "back",
+      "acrown": "crown",
+      "adabomin": null,
+      "additiont": "addition",
+      "againsst": "against",
+      "agray": "gray",
+      "agrayish": "grayish",
+      "agrey": "agree",
+      "ahwite": "white",
+      "airbound": "around",
+      "airsack": "airsick",
+      "alittle": "little",
+      "almos": "almost",
+      "alot": "lot",
+      "alson": "also",
+      "alsos": "also",
+      "ambered": "cambered",
+      "amd": "and",
+      "anbd": "and",
+      "anda": "and",
+      "andblack": null,
+      "andbrown": "andiron",
+      "andinner": "dinner",
+      "ands": "and",
+      "andthe": "another",
+      "anorange": "arrange",
+      "areblack": "bareback",
+      "ared": "are",
+      "ashort": "short",
+      "asnd": "and",
+      "astriped": "striped",
+      "aswell": "swell",
+      "attaches": "attach\u00e9s",
+      "awhite": "white",
+      "backwith": "backwash",
+      "baclk": "back",
+      "baige": "badge",
+      "bak": "back",
+      "bape": "tape",
+      "barkbrown": null,
+      "barsus": "tarsus",
+      "bas": "was",
+      "bblue": "blue",
+      "bea": "be",
+      "beal": "real",
+      "beally": "really"
+    },
+    "uninformative_captions_no_colour_or_part": 84,
+    "uninformative_examples": [
+      "this magestic creature looks like it is soaring through the air at a zoo exhibit.",
+      "a grayish bird is standing a tree truck looking out at a distance.",
+      "this bird has no distinctive features it looks like a lump on the branch and is very camouflaged.",
+      "this small bird has is the color of the desert.",
+      "a short billed bird is feathered in what is a likely protective camouflage of browns and blacks.",
+      "a large cormorant of the pacific coast, the brandt's cormorant is found only in marine environments",
+      "this bird is very metallic. it looks like a tiffany piece. very ornate and glittery.",
+      "a small yet plump looking bird that is grayish in color.",
+      "this",
+      "this bird is long, skinny, and has the color of many earthtones blending into the wooden perch it is on.",
+      "a dormant slow looking bird with a spark of interest for food",
+      "this bird is bespeckled in appearance and has a very large oblong shaped torso",
+      "a bird that lives by the ocean. it eats anything.",
+      "this bird has a very long, pointy break and is covered in a multitude of browns, oranges, and greens.",
+      "it is a bird that likes water. i think it is a male bird."
+    ],
+    "shortest_captions": [
+      "this",
+      "the colorful bird",
+      "a medium grey bird.",
+      "a large black bird.",
+      "a small black bird.",
+      "tan and brown slender bird.",
+      "this bird is completely gray.",
+      "long legs, yellow, short beak.",
+      "this bird is completely black.",
+      "brown bird with white chest."
+    ],
+    "longest_captions": [
+      "this is a grayish bird with a stripe of black that extends from the top of its head through the eyes to the tip of the beak and down its neck along with a hint of white in the face, black, white, tan and pink wings, a black and yellow-tipped tail, and a round body with hints of reddish brown in the face and tail.",
+      "this special bird has a color of reddish-brown that tapers to the tail with a uniform gray-brown very smooth looking plumage, he has a black cheek patch and eyebrow with a tiny black beak and feet, and you can't help but notice the tuft of red to brown hair that sicks straight out off the back of his crown because he is beautiful.",
+      "this small bird has a brown head with a raised tuft on the top of the head and a black eye mark that runs from the bill past the eye, then turns upward and goes to the top of the head, the bill is also black, the breast is light brown the belly and rump are faint green, the wings and tail are grey."
+    ],
+    "most_repeated_captions_across_images": {
+      "this bird has wings that are brown and has a white belly": 971,
+      "this bird has wings that are black and has a white belly": 716,
+      "this bird has a speckled belly and breast with a short pointy bill.": 579,
+      "this bird has wings that are grey and has a white belly": 434,
+      "this bird is brown with white and has a very short beak.": 417,
+      "this bird has wings that are black and has a yellow belly": 363,
+      "this bird is black with white and has a long, pointy beak.": 310,
+      "this bird is brown with white and has a long, pointy beak.": 306,
+      "this bird has wings that are grey and has a yellow belly": 218,
+      "this bird has wings that are black and has a thick bill": 200
+    },
+    "test_words_not_in_train_vocab": 1407,
+    "test_oov_examples": [
+      "robin",
+      "stipes",
+      "run",
+      "backwards",
+      "ayellow",
+      "camo",
+      "berry",
+      "geen",
+      "birght",
+      "decorated",
+      "freathers",
+      "fantastic",
+      "adorns",
+      "content",
+      "littering",
+      "goose",
+      "closely",
+      "folded",
+      "fee",
+      "wand",
+      "he's",
+      "jaw",
+      "triangularbill",
+      "colour",
+      "appointed",
+      "checked",
+      "opening",
+      "dried",
+      "malor",
+      "onyx"
+    ],
+    "colour_word_caption_share": 0.9871,
+    "top_words": [
+      [
+        "black",
+        39478
+      ],
+      [
+        "white",
+        32847
+      ],
+      [
+        "brown",
+        21557
+      ],
+      [
+        "beak",
+        18548
+      ],
+      [
+        "belly",
+        17127
+      ],
+      [
+        "yellow",
+        15674
+      ],
+      [
+        "wings",
+        15442
+      ],
+      [
+        "bill",
+        14605
+      ],
+      [
+        "long",
+        10845
+      ],
+      [
+        "grey",
+        10472
+      ],
+      [
+        "breast",
+        10204
+      ],
+      [
+        "crown",
+        10110
+      ],
+      [
+        "head",
+        9752
+      ],
+      [
+        "orange",
+        7223
+      ],
+      [
+        "short",
+        7003
+      ],
+      [
+        "gray",
+        6950
+      ],
+      [
+        "body",
+        6785
+      ],
+      [
+        "red",
+        6753
+      ],
+      [
+        "feathers",
+        5591
+      ],
+      [
+        "throat",
+        5072
+      ],
+      [
+        "blue",
+        4769
+      ],
+      [
+        "large",
+        4684
+      ],
+      [
+        "tail",
+        4298
+      ],
+      [
+        "pointed",
+        4210
+      ],
+      [
+        "color",
+        3803
+      ],
+      [
+        "back",
+        3698
+      ],
+      [
+        "pointy",
+        3643
+      ],
+      [
+        "dark",
+        3574
+      ],
+      [
+        "feet",
+        3562
+      ],
+      [
+        "green",
+        3440
+      ]
+    ]
+  },
+  "caption_cleaning_examples": [
+    {
+      "raw": "this bird is all brown with slight cream colored speckles along its neck , except for its face and crown which is white.",
+      "clean": "this bird is all brown with slight cream colored speckles along its neck, except for its face and crown which is white."
+    },
+    {
+      "raw": "bird has brown body feathers,brown breast feather, and thick beak",
+      "clean": "bird has brown body feathers, brown breast feather, and thick beak"
+    },
+    {
+      "raw": "this bird has a white head and throat/neck with dark brown wings, back and black eyebrows.",
+      "clean": "this bird has a white head and throat neck with dark brown wings, back and black eyebrows."
+    },
+    {
+      "raw": "this bird has a white head,neck and breast with brown wing and back",
+      "clean": "this bird has a white head, neck and breast with brown wing and back"
+    },
+    {
+      "raw": "this bird has black wings and tail while the remainder of it is white, with a pointy bill .",
+      "clean": "this bird has black wings and tail while the remainder of it is white, with a pointy bill."
+    },
+    {
+      "raw": "birds head stomach is white and the birds back and wings are grey,beek is beige flat and long.",
+      "clean": "birds head stomach is white and the birds back and wings are grey, beek is beige flat and long."
+    },
+    {
+      "raw": "this bird has brown, grey and black secondaries,a white crown and rump and black inner and outer retrices.",
+      "clean": "this bird has brown, grey and black secondaries, a white crown and rump and black inner and outer retrices."
+    },
+    {
+      "raw": "a large bird with an expansive wingspan, this bird has a white head, throat, belly , breast ,vent and rump, dark brown and black wings, and black rectrices",
+      "clean": "a large bird with an expansive wingspan, this bird has a white head, throat, belly, breast, vent and rump, dark brown and black wings, and black rectrices"
+    },
+    {
+      "raw": "the span of the wings are enormous; the plummage of the bird is both brown and white.",
+      "clean": "the span of the wings are enormous the plummage of the bird is both brown and white."
+    },
+    {
+      "raw": "the wings and the middle of the back is brown,tail is black and the rest of the body is white,the bill is ligt brown.",
+      "clean": "the wings and the middle of the back is brown, tail is black and the rest of the body is white, the bill is ligt brown."
+    },
+    {
+      "raw": "this bird has grey webbed feet, its body is all grey with black wings and tail, the bill is dark black , the front of the head is black, and the bird has a white eye ring.",
+      "clean": "this bird has grey webbed feet, its body is all grey with black wings and tail, the bill is dark black, the front of the head is black, and the bird has a white eye ring."
+    },
+    {
+      "raw": "this medium sized bird has grey/brown wings, a black head, and light grey back.",
+      "clean": "this medium sized bird has grey brown wings, a black head, and light grey back."
+    }
+  ],
+  "figures": [
+    "01_sample_grid.png",
+    "02_class_distribution.png",
+    "03_family_groups.png",
+    "04_image_sizes.png",
+    "05_image_statistics.png",
+    "06_channel_means.png",
+    "07_quality_extremes.png",
+    "08_grayscale_images.png",
+    "09_near_duplicates.png",
+    "10_caption_lengths_vocab.png",
+    "11_top_words.png",
+    "12_augmentation_examples.png",
+    "13_colorization_pairs.png"
+  ]
+}
