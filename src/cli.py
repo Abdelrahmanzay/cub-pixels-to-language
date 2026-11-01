@@ -34,6 +34,8 @@ def main(argv=None):
     s.add_argument("--val-fraction", type=float, default=0.1)
     s.add_argument("--seed", type=int, default=42)
     s.add_argument("--limit", type=int, default=None, help="only N images per split (debugging)")
+    s.add_argument("--short-side", type=int, default=256,
+                   help="cache images with this shorter side (use 512 for high-resolution runs)")
 
     s = sub.add_parser("eda", help="exploratory data analysis (figures + summary)")
     s.add_argument("--data", default="data/processed")
@@ -50,6 +52,7 @@ def main(argv=None):
     s.add_argument("--split", choices=("train", "val", "test"), default="test")
     s.add_argument("--batch-size", type=int, default=64)
     s.add_argument("--num-workers", type=int, default=2)
+    s.add_argument("--tta", action="store_true", help="horizontal-flip test-time augmentation")
 
     s = sub.add_parser("predict", help="run inference on one image")
     s.add_argument("--task", choices=TASKS, default="classification")
@@ -86,7 +89,7 @@ def main(argv=None):
         run_doctor()
     elif a.command == "prepare":
         from src.data.prepare import prepare_dataset
-        prepare_dataset(a.out, a.val_fraction, a.seed, a.limit)
+        prepare_dataset(a.out, a.val_fraction, a.seed, a.limit, a.short_side)
     elif a.command == "eda":
         from src.data.eda import run_eda
         run_eda(a.data, a.out)
@@ -100,7 +103,7 @@ def main(argv=None):
         if a.task != "classification":
             _milestone2(a.task)
         from src.pipelines.classification import evaluate_checkpoint
-        evaluate_checkpoint(a.checkpoint, a.split, batch_size=a.batch_size, num_workers=a.num_workers)
+        evaluate_checkpoint(a.checkpoint, a.split, batch_size=a.batch_size, num_workers=a.num_workers, tta=a.tta)
     elif a.command == "predict":
         if a.task != "classification":
             _milestone2(a.task)

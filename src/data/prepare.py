@@ -30,6 +30,7 @@ from src.data.text import split_description
 HF_TRAIN = "Multimodal-Fatima/CUB_train"
 HF_TEST = "Multimodal-Fatima/CUB_test"
 SHORT_SIDE = 256
+BBOX_FILE = Path(__file__).resolve().parents[2] / "resources" / "cub_bounding_boxes.csv"
 
 
 def _resize_short_side(img: Image.Image, short: int) -> Image.Image:
@@ -41,7 +42,7 @@ def _resize_short_side(img: Image.Image, short: int) -> Image.Image:
 
 
 def prepare_dataset(out_root: str = "data/processed", val_fraction: float = 0.1,
-                    seed: int = 42, limit: int | None = None) -> pd.DataFrame:
+                    seed: int = 42, limit: int | None = None, short_side: int = SHORT_SIDE) -> pd.DataFrame:
     from datasets import load_dataset  # imported lazily (heavy)
 
     out = Path(out_root)
@@ -64,7 +65,7 @@ def prepare_dataset(out_root: str = "data/processed", val_fraction: float = 0.1,
             arr = np.asarray(rgb.resize((64, 64)), dtype=np.int16)
             is_gray_content = bool(np.abs(arr[..., 0] - arr[..., 1]).max() <= 2 and
                                    np.abs(arr[..., 1] - arr[..., 2]).max() <= 2)
-            small = _resize_short_side(rgb, SHORT_SIDE)
+            small = _resize_short_side(rgb, short_side)
             rel = Path("images") / split_name / f"{i:05d}.jpg"
             small.save(out / rel, quality=95)
             caps = split_description(rec["description"])
@@ -87,6 +88,7 @@ def prepare_dataset(out_root: str = "data/processed", val_fraction: float = 0.1,
             })
 
     df = pd.DataFrame(rows)
+    df = add_bounding_boxes(df)
     df = mark_duplicates(df, out)
     # stratified validation split carved from the official train split
     train_idx = df.index[df["split"] == "train"]
@@ -119,6 +121,19 @@ def _hamming_matrix_pairs(hashes: np.ndarray, threshold: int) -> list[tuple[int,
             if i + s < j:
                 pairs.append((int(i + s), int(j), int(d[i, j])))
     return pairs
+
+
+def add_bounding_boxes(df: pd.DataFrame) -> pd.DataFrame:
+    """Attach the official CUB-200-2011 bird bounding boxes (x, y, w, h in ORIGINAL pixel
+    coordinates). They are not part of the Hugging Face version; we extracted them once from the
+    original release (bounding_boxes.txt + images.txt) into resources/cub_bounding_boxes.csv."""
+    if not BBOX_FILE.exists():
+        print(f"warning: {BBOX_FILE} missing -> no bounding boxes")
+        return df
+    boxes = pd.read_csv(BBOX_FILE)
+    out = df.merge(boxes, on="file_name", how="left")
+    print(f"bounding boxes matched for {out['bbox_x'].notna().sum()}/{len(out)} images")
+    return out
 
 
 DUPLICATE_HAMMING = 2  # pHash distance <= 2 -> same photo (checked visually in the EDA)
