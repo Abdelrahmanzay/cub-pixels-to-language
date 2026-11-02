@@ -1,0 +1,13 @@
+{
+  "split": "test",
+  "checkpoint": "outputs/runs/final_bbox_cosine_20261102-005129/best.pt",
+  "tta": "hflip",
+  "metrics": {
+    "accuracy": 0.872109078356921,
+    "top5_accuracy": 0.9654815326199516,
+    "precision_macro": 0.8757505850505514,
+    "recall_macro": 0.8730948671824944,
+    "f1_macro": 0.8713958005562783,
+    "balanced_accuracy": 0.8730948671824944
+  }
+}

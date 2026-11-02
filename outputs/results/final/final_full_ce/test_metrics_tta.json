@@ -1,0 +1,13 @@
+{
+  "split": "test",
+  "checkpoint": "outputs/runs/final_full_ce_20261102-005207/best.pt",
+  "tta": "hflip",
+  "metrics": {
+    "accuracy": 0.8727994477045219,
+    "top5_accuracy": 0.9704867103900586,
+    "precision_macro": 0.8766266175760155,
+    "recall_macro": 0.8740912578198343,
+    "f1_macro": 0.8723793946530819,
+    "balanced_accuracy": 0.8740912578198343
+  }
+}

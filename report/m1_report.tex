@@ -44,7 +44,7 @@ Abdelrahman Mohamed Zayed & 23P0094 \\
 Member 2 & --- \\
 Member 3 & --- \\
 Member 4 & --- \\
-Member 5 & --- \\
+Hassan Hazem & --- \\
 \bottomrule
 \end{tabular}
 \vfill
@@ -78,10 +78,13 @@ per image (captioning). It is also small enough ($\approx$1.1\,GB) for free Kagg
 families (25 warblers, 21 sparrows, 8 gulls, 7 terns, \dots; Fig.~\ref{fig:family}) that differ in small
 details such as a wing bar or the colour of the bill, while only $\sim$30 training images exist per class.
 
-\textbf{Summary of results.} Our from-scratch residual CNN reaches \textbf{52.5\%} test accuracy;
-transfer learning raises this to \textbf{82.4\%} (ResNet-50) and \textbf{84.6\%} (ConvNeXt-Tiny, our
-selected model). Random search found a better short-run configuration than grid search with the same
-budget, but the gain did not survive a full-length training run (Section~\ref{sec:tuning}).
+\textbf{Summary of results.} In the baseline experiments our from-scratch residual CNN reached \textbf{52.5\%} test accuracy and
+transfer learning raised this to \textbf{82.4\%} (ResNet-50) and \textbf{84.6\%} (ConvNeXt-Tiny). We then improved the models one
+change at a time (Section~\ref{sec:improve}): cropping to the bird, Mixup/CutMix, the cosine loss, higher resolution, test-time
+augmentation and a second tuning round. Our \textbf{final model}, a full-image ConvNeXt-Tiny at 384\,px, reaches \textbf{87.0\%}
+test accuracy (\textbf{87.3\%} with test-time augmentation) without any annotation at test time, and our improved scratch CNN reaches
+\textbf{66.8\%} (67.5\% with TTA). Random search beat grid search with the same budget; the first tuning round did not survive a
+full-length run, which led to a better second tuning protocol.
 
 %=====================================================================
 \section{Data: EDA, Cleaning, Preprocessing and Augmentation}
@@ -431,7 +434,8 @@ offline. For each run we log: the full configuration (all hyper-parameters, enco
 train/validation loss and accuracy, validation macro-F1 and top-5, learning rate and epoch time, the final test metrics,
 parameter counts, the device, and the path of the best checkpoint. Tuning trials are grouped
 (\texttt{tune-grid-*}, \texttt{tune-random-*}) and tagged, so the two searches can be compared side by side.
-In total the project contains 25 runs (7 training runs and 18 tuning trials).
+In total Milestone~1 contains 53 runs: 7 baseline training runs, 18 tuning-v1 trials, 16 improvement runs, 8 tuning-v2 trials
+and 4 final runs.
 
 \begin{figure}[H]\centering
 \shot{wandb_runs.png}{Screenshot: W\&B project page --- run table with all runs, their configs and test accuracy}
@@ -528,7 +532,10 @@ Method & Backbone (pretraining) & Input & Top-1 (\%) & Source\\
 \midrule
 \multicolumn{5}{l}{\emph{Trained from scratch}}\\
 ResNet-50, 300 epochs$^\dagger$ & ResNet-50 (none) & -- & 66.7 & \cite{featmining}\\
-\textbf{Ours, scratch CNN, 80 epochs} & 11M CNN (none) & 224 & \textbf{52.5} & \\
+ResNet-50 + cross-entropy & ResNet-50 (none) & 448 & 51.9 & \cite{cosine}\\
+ResNet-50 + cosine loss + cross-entropy & ResNet-50 (none) & 448 & 68.0 & \cite{cosine}\\
+Ours, scratch CNN, 80 epochs (baseline) & 11M CNN (none) & 224 & 52.5 & \\
+\textbf{Ours, scratch CNN, final}$^\ddagger$ & 11M CNN (none) & 224 & \textbf{66.8} & \\
 \midrule
 \multicolumn{5}{l}{\emph{Fine-tuned ImageNet backbones}}\\
 ResNet-50 (+2 FC layers) & ResNet-50 (IN-1k) & 224 & 77.5 & \cite{posthoc}\\
@@ -537,10 +544,11 @@ ResNet-50 baseline & ResNet-50 (IN-1k) & 448 & 85.3 & \cite{cutthumb}\\
 NTS-Net (part-based) & ResNet-50 (IN-1k) & 448 & 87.5 & \cite{nts}\\
 TransFG (state of the art class) & ViT-B/16 (IN-21k) & 448 & 91.7 & \cite{transfg}\\
 \textbf{Ours, ResNet-50 fine-tune} & ResNet-50 (IN-1k) & 224 & \textbf{82.4} & \\
-\textbf{Ours, ConvNeXt-Tiny fine-tune} & ConvNeXt-T (IN-1k) & 224 & \textbf{84.6} & \\
+Ours, ConvNeXt-Tiny fine-tune (baseline) & ConvNeXt-T (IN-1k) & 224 & 84.6 & \\
+\textbf{Ours, ConvNeXt-Tiny final} & ConvNeXt-T (IN-1k) & 384 & \textbf{87.0} (87.3 TTA) & \\
 \bottomrule
 \end{tabular}
-\caption{Comparison with published results on the CUB-200-2011 test split. $^\dagger$Reported by the authors as ``validation accuracy''.}
+\caption{Comparison with published results on the CUB-200-2011 test split. $^\dagger$Reported by the authors as ``validation accuracy''. $^\ddagger$Uses ground-truth bird boxes at test time.}
 \end{table}
 
 \textbf{Discussion of the differences.}
@@ -552,22 +560,32 @@ reported in~\cite{posthoc}; part of this is our training recipe (AdamW, discrimi
 and the stronger torchvision ImageNet weights (\texttt{IMAGENET1K\_V2}) we start from.
 \item \textbf{ConvNeXt-Tiny at 224\,px matches ResNet-50 at 448\,px} (84.6\% vs.\ 84.5\%) with about four times fewer input
 pixels, showing the benefit of a newer architecture.
+\item \textbf{Our final model} (87.0\%, full image, 384\,px, no annotations) is above the 448\,px ResNet-50 baselines
+(84.5--85.3\%) and close to the part-based NTS-Net (87.5\%), with a standard architecture and no part-localisation module.
+\item \textbf{From scratch, the cosine loss reproduces the published trend}: Barz \& Denzler~\cite{cosine} report 51.9\%
+(cross-entropy) vs.\ 68.0\% (cosine + cross-entropy) for a ResNet-50 trained from scratch on CUB; our 11M-parameter CNN goes from
+52.5\% to 66.8\% with the cosine loss, bird crops and Mixup/CutMix. Their numbers do not use bounding boxes, ours do, so this row is
+a trend comparison rather than a like-for-like one.
 \item \textbf{The gap to the state of the art} (TransFG, 91.7\%) comes from three things we do not use: a ViT-B/16 pretrained on the
 $14\times$ larger ImageNet-21k, 448\,px input, and explicit part-selection mechanisms designed for fine-grained recognition.
-\item \textbf{From scratch}, our CNN is below the 300-epoch ResNet-50 of~\cite{featmining} (52.5\% vs.\ 66.7\%); that model is
-twice as large and trained almost four times longer. Our training had not fully saturated, but was strongly overfitting.
+\item \textbf{From scratch}, our baseline CNN was far below the 300-epoch ResNet-50 of~\cite{featmining} (52.5\% vs.\ 66.7\%); with
+the improvements of Section~\ref{sec:improve} our final scratch CNN (66.8\%) matches it with half the parameters, but with bounding boxes.
 \item \textbf{Limits of the comparison}: we report a single seed, while published baselines differ in epochs, optimisers and
 augmentation; these numbers should be read as reference points, not as a controlled comparison.
 \end{itemize}
 
+\input{section_improve}
+
 %=====================================================================
 \section{Final selection}
 %=====================================================================
-\textbf{Classifier: ConvNeXt-Tiny, fully fine-tuned} --- best on every metric (84.6\% accuracy, 84.5\% macro-F1, 96.0\% top-5),
-best validation accuracy (84.3\%, which is how the model was \emph{selected}; the test set was only used for reporting), with an
-acceptable cost (28.8\,s/epoch on a T4).
+\textbf{Classifier: ConvNeXt-Tiny, fully fine-tuned on full images at 384\,px with Mixup/CutMix and the tuning-v2 hyper-parameters}
+(\texttt{configs/improve/final\_full\_ce.yaml}). It has the best validation accuracy of all runs (87.3\% --- this is how it was
+\emph{selected}; the test set was only used for reporting) and reaches \textbf{87.0\% test accuracy, 87.3\% with flip TTA}, 87.2\%
+macro-F1 and 97.1\% top-5. It needs no bounding box at inference. Training takes 55 minutes on a T4. \textbf{Best from-scratch model:}
+our residual CNN with bird crops, cosine loss and Mixup/CutMix, 250 epochs: 66.8\% (67.5\% with TTA).
 
-\textbf{Encoder for Milestone 2.} The fine-tuned ConvNeXt-Tiny encoder will be the main backbone for colorization and captioning:
+\textbf{Encoder for Milestone 2.} The final fine-tuned ConvNeXt-Tiny encoder will be the main backbone for colorization and captioning:
 it provides the best bird-specific features and four feature maps (96--768 channels, strides 4--32) that plug directly into a
 U-Net decoder. Fine-tuned ResNet-50 is kept as a second backbone for comparison, and the scratch CNN as the from-scratch baseline.
 All three checkpoints are stored in the shared Google Drive folder.
@@ -576,15 +594,22 @@ All three checkpoints are stored in the shared Google Drive folder.
 \section{Failures and limitations}\label{sec:fail}
 %=====================================================================
 \begin{itemize}
-\item \textbf{Scratch CNN overfits strongly} (96\% train vs.\ 51\% validation accuracy). Next: stronger augmentation such as
-Mixup/CutMix, a smaller or wider-but-shallower network, and longer training with a restart schedule.
+\item \textbf{Scratch CNN overfitting.} The baseline overfit strongly (96\% train vs.\ 51\% validation). Bird crops, the cosine
+loss, Mixup/CutMix and longer training raised it to 66.8\%, but Grad-CAM shows it still relies on background context.
 \item \textbf{The CNN without residual connections failed to train well} (44\% training accuracy): this was an intended
 ablation, but it confirms that plain 18-layer CNNs are hard to optimise.
-\item \textbf{Tuning did not transfer to the full schedule}: the short-run optimum gave no improvement at 30 epochs. Next: tune with a
-longer proxy, include more hyper-parameters (augmentation strength, label smoothing, backbone LR multiplier), use several seeds,
-and try Optuna/Hyperband.
+\item \textbf{Tuning v1 did not transfer to the full schedule}: the 8-epoch optimum gave no improvement at 30 epochs. Tuning v2
+(15-epoch proxy, 4 hyper-parameters, final model family) produced the settings used by the final model. Still open: several seeds,
+Optuna/Hyperband, and tuning augmentation strength.
+\item \textbf{Some ideas did not work}: RandAugment and the \emph{strong} augmentation \emph{lowered} accuracy; 384\,px on full
+images gave no test gain on its own; the cosine loss was worse than cross-entropy for ResNet-50.
+\item \textbf{Ground-truth boxes}: the crop experiments use annotations that are not available for new photos; the final model
+therefore does not use them. A bird detector would be needed to use cropping in practice.
+\item \textbf{Label noise}: at least 4\% of CUB labels are estimated to be wrong~\cite{vanhorn}; several confident ``errors'' of our
+final model look like such cases.
 \item \textbf{Single seed and a small validation set} (598 images): differences below $\sim$1.5 points are not statistically reliable.
-\item \textbf{Resolution 224\,px} was chosen to fit 6--8\,GB GPUs and the time budget; 448\,px would likely gain 2--3 points.
+\item \textbf{Resolution}: baseline runs used 224\,px; the final model uses 384\,px. 448\,px and larger backbones
+(ConvNeXt-Small/Base, ImageNet-21k weights) were not tried because of the GPU budget.
 \item \textbf{Infrastructure}: the first Kaggle runs silently ran without GPU or internet because the account was not phone-verified;
 our CLI now refuses to train on a CPU unless explicitly allowed, and the code, data and weights are packaged so the jobs can run
 offline.
@@ -600,7 +625,8 @@ All final code is pure Python, run through the CLI (\texttt{src/cli.py}); notebo
 python -m src.cli doctor          # checks GPU, CUDA PyTorch, W&B login, data
 python -m src.cli prepare         # download, cache, split, deduplicate
 python -m src.cli eda
-python -m src.cli train --task classification --config configs/cls_convnext_tiny_ft.yaml
+python -m src.cli prepare --out data/processed_hr --short-side 512     # high-resolution cache
+python -m src.cli train --task classification --config configs/improve/final_full_ce.yaml
 python -m src.cli tune  --config configs/tune_resnet50.yaml --method grid    # or random
 python -m src.cli compare-tuning --dirs outputs/tuning/grid_* outputs/tuning/random_*
 python -m src.cli evaluate --task classification --checkpoint <run>/best.pt --split test
@@ -620,11 +646,11 @@ contains the exact configuration it was trained with.
 \toprule
 Member & Contribution\\
 \midrule
-Abdelrahman Mohamed Zayed & Repository and project structure, data pipeline, EDA, training/tuning pipeline, Kaggle and W\&B setup, experiments, report\\
+Abdelrahman Mohamed Zayed & Repository and project structure, data pipeline, EDA, training/tuning pipeline, improvement experiments (bird crop, cosine loss, Mixup/CutMix, TTA, tuning v2), Kaggle and W\&B setup, report\\
 Member 2 & Data module: tests and documentation of caption cleaning, transforms and datasets\\
 Member 3 & Models: encoder/classifier tests, model summary script, architecture documentation\\
 Member 4 & Training: config and scheduler/optimizer tests, tuning tests, training documentation\\
-Member 5 & Evaluation: metric and Grad-CAM tests, batch-inference feature, evaluation documentation\\
+Hassan Hazem & Evaluation: metric and Grad-CAM tests, batch (folder) inference feature, evaluation documentation (PR \#1)\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -644,6 +670,12 @@ Member 5 & Evaluation: metric and Grad-CAM tests, batch-inference feature, evalu
 \bibitem{posthoc} T.~Leemann et al. When are Post-hoc Conceptual Explanations Identifiable? UAI 2023. \url{https://arxiv.org/abs/2206.13872}
 \bibitem{featmining} Feature Mining: A Novel Training Strategy for Convolutional Neural Network. \url{https://arxiv.org/abs/2107.08421}
 \bibitem{transfg} J.~He et al. TransFG: A Transformer Architecture for Fine-grained Recognition. AAAI 2022. \url{https://arxiv.org/abs/2103.07976}
+\bibitem{cosine} B.~Barz, J.~Denzler. Deep Learning on Small Datasets without Pre-Training using Cosine Loss. WACV 2020. \url{https://arxiv.org/abs/1901.09054}
+\bibitem{mixup} H.~Zhang, M.~Cisse, Y.~N.~Dauphin, D.~Lopez-Paz. mixup: Beyond Empirical Risk Minimization. ICLR 2018.
+\bibitem{cutmix} S.~Yun et al. CutMix: Regularization Strategy to Train Strong Classifiers with Localizable Features. ICCV 2019.
+\bibitem{randaugment} E.~D.~Cubuk, B.~Zoph, J.~Shlens, Q.~V.~Le. RandAugment: Practical Automated Data Augmentation with a Reduced Search Space. CVPR Workshops 2020.
+\bibitem{trivialaugment} S.~G.~M\"uller, F.~Hutter. TrivialAugment: Tuning-free Yet State-of-the-Art Data Augmentation. ICCV 2021.
+\bibitem{vanhorn} G.~Van Horn et al. Building a Bird Recognition App and Large Scale Dataset with Citizen Scientists: The Fine Print in Fine-Grained Dataset Collection. CVPR 2015.
 \bibitem{wandb} L.~Biewald. Experiment Tracking with Weights and Biases, 2020. \url{https://wandb.ai}
 \bibitem{torchvision} TorchVision maintainers. TorchVision: PyTorch's Computer Vision library. \url{https://github.com/pytorch/vision}
 \end{thebibliography}
