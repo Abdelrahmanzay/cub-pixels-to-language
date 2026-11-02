@@ -79,7 +79,11 @@ def gradcam_grid(images: torch.Tensor, labels: list[int], model_outputs: list[di
         axes[i, 0].set_title(f"true: {class_names[labels[i]][:24]}", fontsize=7)
         for j, mo in enumerate(model_outputs):
             ok = mo["preds"][i] == labels[i]
-            axes[i, j + 1].imshow(overlay(img, mo["cams"][i].numpy()))
+            cam = mo["cams"][i]
+            if cam.shape != img.shape[:2]:  # models with different input sizes (e.g. 224 vs 384 px)
+                cam = F.interpolate(cam[None, None], size=img.shape[:2], mode="bilinear",
+                                    align_corners=False)[0, 0]
+            axes[i, j + 1].imshow(overlay(img, cam.numpy()))
             axes[i, j + 1].set_title(f"{mo['name']}\npred: {class_names[mo['preds'][i]][:22]} "
                                      f"({mo['conf'][i]:.2f})", fontsize=7, color="green" if ok else "red")
     for a in axes.ravel():
