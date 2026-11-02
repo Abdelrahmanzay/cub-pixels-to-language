@@ -1,0 +1,5 @@
+# Final candidate 2: same as final_bbox_ce but with the cosine loss
+extends: final_bbox_ce.yaml
+run_name: final_bbox_cosine
+train: {loss: cosine, label_smoothing: 0.0}
+tracking: {tags: [improve, final, bbox, resolution, mixup-cutmix, tuned, cosine]}

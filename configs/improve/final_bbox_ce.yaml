@@ -1,0 +1,8 @@
+# Final candidate 1: everything that helped individually - bird crop + 384 px + Mixup/CutMix
+# + tuning-v2 hyper-parameters (cross-entropy)
+extends: ../cls_convnext_tiny_ft.yaml
+run_name: final_bbox_ce
+data: {root: data/processed_hr, crop: bbox, image_size: 384}
+train: {lr: 0.00125, weight_decay: 0.0000126, backbone_lr_mult: 0.25, label_smoothing: 0.1,
+        mixup_alpha: 0.2, cutmix_alpha: 1.0, mix_prob: 0.8, epochs: 40, early_stopping_patience: 12}
+tracking: {tags: [improve, final, bbox, resolution, mixup-cutmix, tuned]}

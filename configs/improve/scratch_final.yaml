@@ -1,0 +1,5 @@
+# Scratch CNN, all improvements, longer: still improving at epoch 150 -> 250 epochs
+extends: scratch_bbox_cosine_mix.yaml
+run_name: scratch_final
+train: {epochs: 250, early_stopping_patience: 60}
+tracking: {tags: [improve, final, scratch, bbox, cosine, mixup-cutmix]}
