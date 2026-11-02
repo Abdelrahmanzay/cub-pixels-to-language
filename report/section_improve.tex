@@ -56,11 +56,11 @@ Seven augmentation strategies were compared on the same model (ResNet-50 fine-tu
 \item \textbf{Augmentation matters}: with none, test accuracy is 80.9\%; every geometric augmentation improves it by about 2--3 points.
 \item \textbf{Light $\approx$ standard} (83.9\% vs.\ 83.8\%, within noise).
 \item \textbf{Too strong hurts}: \emph{strong} (82.7\%) sometimes crops the bird out entirely (Fig.~\ref{fig:aug}).
-\item \textbf{RandAugment is the worst augmented setting (82.0\%)}. Its policy includes colour-changing operations (Color, Solarize,
+\item \textbf{RandAugment~\cite{randaugment} is the worst augmented setting (82.0\%)}. Its policy includes colour-changing operations (Color, Solarize,
 Posterize, Equalize). This supports our EDA-based decision not to alter colours: colour is a label-relevant feature for birds.
-TrivialAugment, whose operations are sampled with random strength (often weak), stays at the standard level (83.7\%).
-\item \textbf{Mixup/CutMix on top of standard is the best} (84.4\% test, 85.0\% with TTA). Mixup blends two images and their labels;
-CutMix pastes a patch of one image into another and mixes the labels by area. Both prevent the model from becoming over-confident on
+TrivialAugment~\cite{trivialaugment}, whose operations are sampled with random strength (often weak), stays at the standard level (83.7\%).
+\item \textbf{Mixup/CutMix on top of standard is the best} (84.4\% test, 85.0\% with TTA). Mixup~\cite{mixup} blends two images and their labels;
+CutMix~\cite{cutmix} pastes a patch of one image into another and mixes the labels by area. Both prevent the model from becoming over-confident on
 27 images per class. (The low ``train accuracy'' of mixed runs, $\sim$67\%, is measured on the mixed images and is expected.)
 \end{itemize}
 
@@ -140,4 +140,67 @@ Bird crop, Mixup/CutMix (40 ep.) & 84.6 & \textbf{86.5} & \textbf{86.7} & \textb
 \caption{ConvNeXt-Tiny improvements (\%). Validation differences below $\sim$1.5 points are within noise (598 images).}
 \end{table}
 
-%FINALRUNS
+%---------------------------------------------------------------------
+\subsection{Final combined runs and model selection}\label{sec:finalruns}
+Finally we combined everything that helped on its own --- 384\,px input, Mixup/CutMix (40 epochs) and the tuning-v2
+hyper-parameters (head LR $1.25\!\times\!10^{-3}$, backbone multiplier 0.25, weight decay $1.3\!\times\!10^{-5}$, label smoothing 0.1)
+--- in three ConvNeXt-Tiny variants, plus a longer (250-epoch) run of the improved scratch CNN. All four ran in parallel on
+two Kaggle machines with two T4 GPUs each.
+
+\begin{table}[H]\centering\small
+\begin{tabular}{lcccccc}
+\toprule
+Run & Crop & Loss & \textbf{Val} & Test & Test + TTA & Macro-F1 (TTA)\\
+\midrule
+\textbf{ConvNeXt-T, full image} & none & CE & \textbf{87.3} & 87.0 & 87.3 & 87.2\\
+ConvNeXt-T, bird crop & GT box & CE & 86.3 & 87.3 & 87.5 & 87.4\\
+ConvNeXt-T, bird crop, cosine & GT box & cosine & 86.8 & 86.9 & 87.2 & 87.1\\
+\midrule
+Scratch CNN, all improvements, 250 ep. & GT box & cosine & 69.1 & 66.8 & 67.5 & 67.1\\
+\bottomrule
+\end{tabular}
+\caption{Final combined runs (\%, 384\,px for ConvNeXt, 224\,px for the scratch CNN). CE = cross-entropy, GT box = ground-truth bounding box.}\label{tab:final}
+\end{table}
+
+\textbf{Selection rule: highest validation accuracy.} The winner is the \textbf{full-image} ConvNeXt-Tiny (87.3\% validation,
+\textbf{87.0\% test, 87.3\% with TTA}, top-5 97.1\%). This is a welcome outcome: the selected model needs \emph{no bounding box at
+test time}, so it is directly comparable with annotation-free published methods. Once the model is strong and sees the image at
+384\,px, the benefit of cropping shrinks to $\sim$0.3 test points (and reverses on validation) --- differences inside the noise level
+($\pm$0.45 points on test, $\pm$1.4 on validation). We deliberately did \emph{not} pick the crop model because of its slightly higher
+test score: that would be selecting on the test set. Compared with the Milestone-1 ConvNeXt (84.6\%), the final model gains
+\textbf{+2.4 points}; compared with our first from-scratch CNN (52.5\%), the final scratch CNN gains \textbf{+14.3 points}.
+
+We did not retrain the final model on train+val: the option is implemented (\texttt{data.train\_on\_val}), but without a held-out
+validation set the result could no longer be checked, and 598 extra images ($+11\%$) would likely change accuracy by less than the noise.
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.6\linewidth]{figs/curves_final.png}
+\caption{Final ConvNeXt-Tiny: training and validation curves. Training accuracy is measured on mixed (Mixup/CutMix) images and is therefore lower than validation accuracy.}
+\end{figure}
+
+\subsection{Grad-CAM of the final models}
+\begin{figure}[H]\centering
+\includegraphics[width=0.72\linewidth]{figs/gradcam_m1_vs_final.png}
+\caption{Images the Milestone-1 ConvNeXt got wrong, with the final ConvNeXt next to it.}\label{fig:gcm1}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.85\linewidth]{figs/gradcam_final_wrong.png}
+\caption{The final ConvNeXt's most confident mistakes, compared with the Milestone-1 ConvNeXt and the final scratch CNN.}\label{fig:gcfinal}
+\end{figure}
+
+\begin{itemize}
+\item \textbf{Tighter attention.} The final ConvNeXt's maps are more compact and centred on the head and breast, while the Milestone-1
+model's maps spread over the body and background (Fig.~\ref{fig:gcm1}). This matches the training changes: CutMix forces the model to
+recognise birds from partial evidence, and the larger backbone learning rate adapts the deep features to birds.
+\item \textbf{Lower confidence on mistakes.} On images the old model misclassified with 0.91--0.94 confidence, the final model makes the
+same mistakes with lower confidence (e.g.\ Worm-eating Warbler 0.94$\rightarrow$0.64, Red-headed Woodpecker 0.92$\rightarrow$0.67): Mixup and
+label smoothing make the model less over-confident.
+\item \textbf{Some ``mistakes'' are probably label errors.} Several of the final model's most confident errors (Fig.~\ref{fig:gcfinal})
+look, on visual inspection, like the \emph{predicted} species: e.g.\ the image labelled \emph{Green Kingfisher} shows the black-and-white
+plumage of a Pied Kingfisher, which all three models predict. Bird experts estimated that at least 4\% of CUB-200-2011 labels are
+wrong~\cite{vanhorn}, which also caps the accuracy any model can reach on this test set.
+\item \textbf{The scratch CNN still uses the background.} Even after all improvements, its maps for wrong predictions often sit next to
+the bird (Fig.~\ref{fig:gcfinal}, right column), and its confidences are saturated at 1.00: the cosine head's scaled scores are not
+calibrated probabilities. Pretraining remains the most important factor for robust features.
+\end{itemize}
