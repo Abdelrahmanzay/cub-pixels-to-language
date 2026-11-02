@@ -1,0 +1,13 @@
+{
+  "split": "test",
+  "checkpoint": "outputs/runs/scratch_bbox_cosine_mix_20261101-232413/best.pt",
+  "tta": "hflip",
+  "metrics": {
+    "accuracy": 0.6662064204349327,
+    "top5_accuracy": 0.8558853986882983,
+    "precision_macro": 0.6688913350595217,
+    "recall_macro": 0.666758626657309,
+    "f1_macro": 0.6620393084763058,
+    "balanced_accuracy": 0.666758626657309
+  }
+}

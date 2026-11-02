@@ -1,0 +1,13 @@
+{
+  "split": "test",
+  "checkpoint": "outputs/runs/convnext_bbox_mix_20261101-221051/best.pt",
+  "tta": "hflip",
+  "metrics": {
+    "accuracy": 0.867103900586814,
+    "top5_accuracy": 0.9694511563686572,
+    "precision_macro": 0.8690508758814837,
+    "recall_macro": 0.8684172661574817,
+    "f1_macro": 0.8656593882747475,
+    "balanced_accuracy": 0.8684172661574817
+  }
+}

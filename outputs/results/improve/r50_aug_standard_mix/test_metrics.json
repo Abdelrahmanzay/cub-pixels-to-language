@@ -1,0 +1,1106 @@
+{
+  "split": "test",
+  "checkpoint": "outputs/runs/r50_aug_standard_mix_20261101-233437/best.pt",
+  "metrics": {
+    "accuracy": 0.8441491197790818,
+    "top5_accuracy": 0.9601311701760442,
+    "precision_macro": 0.8454969177706444,
+    "recall_macro": 0.845998160275127,
+    "f1_macro": 0.8426994278999845,
+    "balanced_accuracy": 0.845998160275127
+  },
+  "most_confused_pairs": [
+    {
+      "true": "California Gull",
+      "predicted": "Western Gull",
+      "count": 12,
+      "true_class_support": 30
+    },
+    {
+      "true": "Common Tern",
+      "predicted": "Artic Tern",
+      "count": 11,
+      "true_class_support": 30
+    },
+    {
+      "true": "Chuck will Widow",
+      "predicted": "Whip poor Will",
+      "count": 11,
+      "true_class_support": 26
+    },
+    {
+      "true": "Common Tern",
+      "predicted": "Forsters Tern",
+      "count": 10,
+      "true_class_support": 30
+    },
+    {
+      "true": "American Crow",
+      "predicted": "Fish Crow",
+      "count": 9,
+      "true_class_support": 30
+    },
+    {
+      "true": "Great Grey Shrike",
+      "predicted": "Loggerhead Shrike",
+      "count": 9,
+      "true_class_support": 30
+    },
+    {
+      "true": "Tree Sparrow",
+      "predicted": "House Sparrow",
+      "count": 8,
+      "true_class_support": 30
+    },
+    {
+      "true": "Brandt Cormorant",
+      "predicted": "Pelagic Cormorant",
+      "count": 8,
+      "true_class_support": 29
+    },
+    {
+      "true": "American Crow",
+      "predicted": "Common Raven",
+      "count": 8,
+      "true_class_support": 30
+    },
+    {
+      "true": "Long tailed Jaeger",
+      "predicted": "Pomarine Jaeger",
+      "count": 7,
+      "true_class_support": 30
+    },
+    {
+      "true": "Fish Crow",
+      "predicted": "American Crow",
+      "count": 7,
+      "true_class_support": 30
+    },
+    {
+      "true": "Elegant Tern",
+      "predicted": "Caspian Tern",
+      "count": 7,
+      "true_class_support": 30
+    },
+    {
+      "true": "Shiny Cowbird",
+      "predicted": "Boat tailed Grackle",
+      "count": 6,
+      "true_class_support": 30
+    },
+    {
+      "true": "Loggerhead Shrike",
+      "predicted": "Great Grey Shrike",
+      "count": 6,
+      "true_class_support": 30
+    },
+    {
+      "true": "Western Wood Pewee",
+      "predicted": "Olive sided Flycatcher",
+      "count": 6,
+      "true_class_support": 30
+    }
+  ],
+  "per_class_accuracy": [
+    {
+      "class": "California Gull",
+      "accuracy": 0.13333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Common Tern",
+      "accuracy": 0.2,
+      "support": 30
+    },
+    {
+      "class": "American Crow",
+      "accuracy": 0.26666666666666666,
+      "support": 30
+    },
+    {
+      "class": "Fish Crow",
+      "accuracy": 0.43333333333333335,
+      "support": 30
+    },
+    {
+      "class": "Long tailed Jaeger",
+      "accuracy": 0.4666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Brandt Cormorant",
+      "accuracy": 0.5172413793103449,
+      "support": 29
+    },
+    {
+      "class": "Shiny Cowbird",
+      "accuracy": 0.5333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Ring billed Gull",
+      "accuracy": 0.5333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Chuck will Widow",
+      "accuracy": 0.5384615384615384,
+      "support": 26
+    },
+    {
+      "class": "Brewer Blackbird",
+      "accuracy": 0.5517241379310345,
+      "support": 29
+    },
+    {
+      "class": "Herring Gull",
+      "accuracy": 0.5666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Western Wood Pewee",
+      "accuracy": 0.5666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Tree Sparrow",
+      "accuracy": 0.5666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Caspian Tern",
+      "accuracy": 0.5666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Forsters Tern",
+      "accuracy": 0.5666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Least Flycatcher",
+      "accuracy": 0.5862068965517241,
+      "support": 29
+    },
+    {
+      "class": "Rusty Blackbird",
+      "accuracy": 0.6,
+      "support": 30
+    },
+    {
+      "class": "Sayornis",
+      "accuracy": 0.6,
+      "support": 30
+    },
+    {
+      "class": "Mockingbird",
+      "accuracy": 0.6333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Elegant Tern",
+      "accuracy": 0.6333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Acadian Flycatcher",
+      "accuracy": 0.6551724137931034,
+      "support": 29
+    },
+    {
+      "class": "Yellow bellied Flycatcher",
+      "accuracy": 0.6551724137931034,
+      "support": 29
+    },
+    {
+      "class": "Pomarine Jaeger",
+      "accuracy": 0.6666666666666666,
+      "support": 30
+    },
+    {
+      "class": "Grasshopper Sparrow",
+      "accuracy": 0.6666666666666666,
+      "support": 30
+    },
+    {
+      "class": "Savannah Sparrow",
+      "accuracy": 0.6666666666666666,
+      "support": 30
+    },
+    {
+      "class": "Bank Swallow",
+      "accuracy": 0.6666666666666666,
+      "support": 30
+    },
+    {
+      "class": "Black Tern",
+      "accuracy": 0.6666666666666666,
+      "support": 30
+    },
+    {
+      "class": "Glaucous winged Gull",
+      "accuracy": 0.6896551724137931,
+      "support": 29
+    },
+    {
+      "class": "Tennessee Warbler",
+      "accuracy": 0.6896551724137931,
+      "support": 29
+    },
+    {
+      "class": "Great Crested Flycatcher",
+      "accuracy": 0.7,
+      "support": 30
+    },
+    {
+      "class": "Slaty backed Gull",
+      "accuracy": 0.7,
+      "support": 20
+    },
+    {
+      "class": "Loggerhead Shrike",
+      "accuracy": 0.7,
+      "support": 30
+    },
+    {
+      "class": "Great Grey Shrike",
+      "accuracy": 0.7,
+      "support": 30
+    },
+    {
+      "class": "Chipping Sparrow",
+      "accuracy": 0.7,
+      "support": 30
+    },
+    {
+      "class": "Nelson Sharp tailed Sparrow",
+      "accuracy": 0.7,
+      "support": 30
+    },
+    {
+      "class": "Song Sparrow",
+      "accuracy": 0.7,
+      "support": 30
+    },
+    {
+      "class": "Field Sparrow",
+      "accuracy": 0.7241379310344828,
+      "support": 29
+    },
+    {
+      "class": "Western Gull",
+      "accuracy": 0.7333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Anna Hummingbird",
+      "accuracy": 0.7333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Common Raven",
+      "accuracy": 0.7333333333333333,
+      "support": 30
+    },
+    {
+      "class": "House Sparrow",
+      "accuracy": 0.7333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Pelagic Cormorant",
+      "accuracy": 0.7666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Olive sided Flycatcher",
+      "accuracy": 0.7666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Boat tailed Grackle",
+      "accuracy": 0.7666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Ruby throated Hummingbird",
+      "accuracy": 0.7666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Green Kingfisher",
+      "accuracy": 0.7666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Hooded Oriole",
+      "accuracy": 0.7666666666666667,
+      "support": 30
+    },
+    {
+      "class": "White necked Raven",
+      "accuracy": 0.7666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Barn Swallow",
+      "accuracy": 0.7666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Hooded Warbler",
+      "accuracy": 0.7666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Bewick Wren",
+      "accuracy": 0.7666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Marsh Wren",
+      "accuracy": 0.7666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Mangrove Cuckoo",
+      "accuracy": 0.782608695652174,
+      "support": 23
+    },
+    {
+      "class": "Yellow billed Cuckoo",
+      "accuracy": 0.7931034482758621,
+      "support": 29
+    },
+    {
+      "class": "Brewer Sparrow",
+      "accuracy": 0.7931034482758621,
+      "support": 29
+    },
+    {
+      "class": "Clay colored Sparrow",
+      "accuracy": 0.7931034482758621,
+      "support": 29
+    },
+    {
+      "class": "Philadelphia Vireo",
+      "accuracy": 0.7931034482758621,
+      "support": 29
+    },
+    {
+      "class": "Northern Fulmar",
+      "accuracy": 0.8,
+      "support": 30
+    },
+    {
+      "class": "Vesper Sparrow",
+      "accuracy": 0.8,
+      "support": 30
+    },
+    {
+      "class": "Pine Warbler",
+      "accuracy": 0.8,
+      "support": 30
+    },
+    {
+      "class": "Winter Wren",
+      "accuracy": 0.8,
+      "support": 30
+    },
+    {
+      "class": "Swainson Warbler",
+      "accuracy": 0.8076923076923077,
+      "support": 26
+    },
+    {
+      "class": "Orchard Oriole",
+      "accuracy": 0.8275862068965517,
+      "support": 29
+    },
+    {
+      "class": "Artic Tern",
+      "accuracy": 0.8275862068965517,
+      "support": 29
+    },
+    {
+      "class": "Yellow throated Vireo",
+      "accuracy": 0.8275862068965517,
+      "support": 29
+    },
+    {
+      "class": "Black footed Albatross",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "Laysan Albatross",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "Scissor tailed Flycatcher",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "Eared Grebe",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "Rufous Hummingbird",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "Belted Kingfisher",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "Ringed Kingfisher",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "Mallard",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "Hooded Merganser",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "Scott Oriole",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "American Pipit",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "Fox Sparrow",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "Blue headed Vireo",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "Orange crowned Warbler",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "House Wren",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "Rock Wren",
+      "accuracy": 0.8333333333333334,
+      "support": 30
+    },
+    {
+      "class": "Sooty Albatross",
+      "accuracy": 0.8571428571428571,
+      "support": 28
+    },
+    {
+      "class": "Gray Catbird",
+      "accuracy": 0.8620689655172413,
+      "support": 29
+    },
+    {
+      "class": "Gray Kingbird",
+      "accuracy": 0.8620689655172413,
+      "support": 29
+    },
+    {
+      "class": "Red faced Cormorant",
+      "accuracy": 0.8636363636363636,
+      "support": 22
+    },
+    {
+      "class": "Black billed Cuckoo",
+      "accuracy": 0.8666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Baltimore Oriole",
+      "accuracy": 0.8666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Ovenbird",
+      "accuracy": 0.8666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Seaside Sparrow",
+      "accuracy": 0.8666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Cliff Swallow",
+      "accuracy": 0.8666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Least Tern",
+      "accuracy": 0.8666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Warbling Vireo",
+      "accuracy": 0.8666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Mourning Warbler",
+      "accuracy": 0.8666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Palm Warbler",
+      "accuracy": 0.8666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Wilson Warbler",
+      "accuracy": 0.8666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Louisiana Waterthrush",
+      "accuracy": 0.8666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Carolina Wren",
+      "accuracy": 0.8666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Rhinoceros Auklet",
+      "accuracy": 0.8888888888888888,
+      "support": 18
+    },
+    {
+      "class": "Painted Bunting",
+      "accuracy": 0.8928571428571429,
+      "support": 28
+    },
+    {
+      "class": "Lincoln Sparrow",
+      "accuracy": 0.896551724137931,
+      "support": 29
+    },
+    {
+      "class": "Golden winged Warbler",
+      "accuracy": 0.896551724137931,
+      "support": 29
+    },
+    {
+      "class": "Pine Grosbeak",
+      "accuracy": 0.9,
+      "support": 30
+    },
+    {
+      "class": "Pied Kingfisher",
+      "accuracy": 0.9,
+      "support": 30
+    },
+    {
+      "class": "Nighthawk",
+      "accuracy": 0.9,
+      "support": 30
+    },
+    {
+      "class": "American Redstart",
+      "accuracy": 0.9,
+      "support": 30
+    },
+    {
+      "class": "Henslow Sparrow",
+      "accuracy": 0.9,
+      "support": 30
+    },
+    {
+      "class": "Canada Warbler",
+      "accuracy": 0.9,
+      "support": 30
+    },
+    {
+      "class": "Myrtle Warbler",
+      "accuracy": 0.9,
+      "support": 30
+    },
+    {
+      "class": "Nashville Warbler",
+      "accuracy": 0.9,
+      "support": 30
+    },
+    {
+      "class": "Northern Waterthrush",
+      "accuracy": 0.9,
+      "support": 30
+    },
+    {
+      "class": "Red headed Woodpecker",
+      "accuracy": 0.9,
+      "support": 30
+    },
+    {
+      "class": "Cactus Wren",
+      "accuracy": 0.9,
+      "support": 30
+    },
+    {
+      "class": "Least Auklet",
+      "accuracy": 0.9090909090909091,
+      "support": 11
+    },
+    {
+      "class": "Red legged Kittiwake",
+      "accuracy": 0.9130434782608695,
+      "support": 23
+    },
+    {
+      "class": "Crested Auklet",
+      "accuracy": 0.9285714285714286,
+      "support": 14
+    },
+    {
+      "class": "Pigeon Guillemot",
+      "accuracy": 0.9285714285714286,
+      "support": 28
+    },
+    {
+      "class": "Yellow breasted Chat",
+      "accuracy": 0.9310344827586207,
+      "support": 29
+    },
+    {
+      "class": "Gray crowned Rosy Finch",
+      "accuracy": 0.9310344827586207,
+      "support": 29
+    },
+    {
+      "class": "Le Conte Sparrow",
+      "accuracy": 0.9310344827586207,
+      "support": 29
+    },
+    {
+      "class": "Kentucky Warbler",
+      "accuracy": 0.9310344827586207,
+      "support": 29
+    },
+    {
+      "class": "Groove billed Ani",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Frigatebird",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Gadwall",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Horned Grebe",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Blue Grosbeak",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Evening Grosbeak",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Red breasted Merganser",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Black throated Sparrow",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "White crowned Sparrow",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Tree Swallow",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Scarlet Tanager",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Summer Tanager",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Blue winged Warbler",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Cape May Warbler",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Cerulean Warbler",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Chestnut sided Warbler",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Cedar Waxwing",
+      "accuracy": 0.9333333333333333,
+      "support": 30
+    },
+    {
+      "class": "Whip poor Will",
+      "accuracy": 0.9473684210526315,
+      "support": 19
+    },
+    {
+      "class": "Baird Sparrow",
+      "accuracy": 0.95,
+      "support": 20
+    },
+    {
+      "class": "American Three toed Woodpecker",
+      "accuracy": 0.95,
+      "support": 20
+    },
+    {
+      "class": "Black capped Vireo",
+      "accuracy": 0.9523809523809523,
+      "support": 21
+    },
+    {
+      "class": "Cardinal",
+      "accuracy": 0.9629629629629629,
+      "support": 27
+    },
+    {
+      "class": "Lazuli Bunting",
+      "accuracy": 0.9642857142857143,
+      "support": 28
+    },
+    {
+      "class": "Brown Thrasher",
+      "accuracy": 0.9655172413793104,
+      "support": 29
+    },
+    {
+      "class": "Worm eating Warbler",
+      "accuracy": 0.9655172413793104,
+      "support": 29
+    },
+    {
+      "class": "Red cockaded Woodpecker",
+      "accuracy": 0.9655172413793104,
+      "support": 29
+    },
+    {
+      "class": "Red winged Blackbird",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Bobolink",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Indigo Bunting",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Eastern Towhee",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Bronzed Cowbird",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Purple Finch",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Vermilion Flycatcher",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Heermann Gull",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Ivory Gull",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Blue Jay",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Dark eyed Junco",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Tropical Kingbird",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "White breasted Kingfisher",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Pacific Loon",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Western Meadowlark",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "White breasted Nuthatch",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Brown Pelican",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Geococcyx",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Harris Sparrow",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "White throated Sparrow",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Green tailed Towhee",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Sage Thrasher",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Red eyed Vireo",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Prairie Warbler",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Yellow Warbler",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Bohemian Waxwing",
+      "accuracy": 0.9666666666666667,
+      "support": 30
+    },
+    {
+      "class": "Parakeet Auklet",
+      "accuracy": 1.0,
+      "support": 23
+    },
+    {
+      "class": "Yellow headed Blackbird",
+      "accuracy": 1.0,
+      "support": 26
+    },
+    {
+      "class": "Spotted Catbird",
+      "accuracy": 1.0,
+      "support": 15
+    },
+    {
+      "class": "Brown Creeper",
+      "accuracy": 1.0,
+      "support": 29
+    },
+    {
+      "class": "Northern Flicker",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "American Goldfinch",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "European Goldfinch",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "Pied billed Grebe",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "Western Grebe",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "Rose breasted Grosbeak",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "Green Violetear",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "Florida Jay",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "Green Jay",
+      "accuracy": 1.0,
+      "support": 27
+    },
+    {
+      "class": "Horned Lark",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "Clark Nutcracker",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "White Pelican",
+      "accuracy": 1.0,
+      "support": 20
+    },
+    {
+      "class": "Horned Puffin",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "Cape Glossy Starling",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "White eyed Vireo",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "Bay breasted Warbler",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "Black and white Warbler",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "Black throated Blue Warbler",
+      "accuracy": 1.0,
+      "support": 29
+    },
+    {
+      "class": "Magnolia Warbler",
+      "accuracy": 1.0,
+      "support": 29
+    },
+    {
+      "class": "Prothonotary Warbler",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "Pileated Woodpecker",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "Red bellied Woodpecker",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "Downy Woodpecker",
+      "accuracy": 1.0,
+      "support": 30
+    },
+    {
+      "class": "Common Yellowthroat",
+      "accuracy": 1.0,
+      "support": 30
+    }
+  ]
+}

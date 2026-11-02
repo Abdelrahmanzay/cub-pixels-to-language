@@ -1,0 +1,56 @@
+seed: 42
+task: classification
+run_name: scratch_bbox
+output_dir: outputs/runs
+data:
+  root: data/processed_hr
+  image_size: 224
+  batch_size: 64
+  num_workers: 3
+  normalization: cub
+  augmentation: standard
+  crop: bbox
+  bbox_margin: 0.15
+  train_on_val: false
+model:
+  encoder: scratch_cnn
+  pretrained: false
+  freeze_encoder: false
+  dropout: 0.3
+  encoder_kwargs: {}
+  cosine_scale: 16.0
+train:
+  epochs: 80
+  optimizer: adamw
+  lr: 0.002
+  backbone_lr_mult: 0.1
+  weight_decay: 0.05
+  momentum: 0.9
+  scheduler: cosine
+  warmup_epochs: 3
+  label_smoothing: 0.1
+  amp: true
+  grad_clip: null
+  early_stopping_patience: 20
+  max_steps_per_epoch: null
+  evaluate_test: true
+  allow_cpu: false
+  loss: ce
+  cosine_xent_weight: 0.1
+  mixup_alpha: 0.0
+  cutmix_alpha: 0.0
+  mix_prob: 1.0
+  select: best_val
+  tta: true
+tracking:
+  backends:
+  - local
+  - wandb
+  project: cub-pixels-to-language
+  entity: 23p0094-ain-shams-university
+  mode: online
+  group: null
+  tags:
+  - improve
+  - scratch
+  - bbox

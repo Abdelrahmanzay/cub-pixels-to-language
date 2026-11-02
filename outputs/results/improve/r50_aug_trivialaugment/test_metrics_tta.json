@@ -1,0 +1,13 @@
+{
+  "split": "test",
+  "checkpoint": "outputs/runs/r50_aug_trivialaugment_20261101-231735/best.pt",
+  "tta": "hflip",
+  "metrics": {
+    "accuracy": 0.8438039351052813,
+    "top5_accuracy": 0.9630652399033482,
+    "precision_macro": 0.8470798904430594,
+    "recall_macro": 0.8453372564773575,
+    "f1_macro": 0.8434283382798546,
+    "balanced_accuracy": 0.8453372564773575
+  }
+}

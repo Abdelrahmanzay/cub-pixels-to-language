@@ -1,0 +1,2 @@
+method,n_trials,best_val_acc,total_time_s,time_to_best_s,trials_to_best,best_params
+random,8,0.8444816053511706,4281.846104787999,1651.2842297270008,3,"{'train.lr': 0.0012456054029913325, 'train.weight_decay': 1.264562600049729e-05, 'train.backbone_lr_mult': 0.2499195926746441, 'train.label_smoothing': 0.10762866264385565}"
