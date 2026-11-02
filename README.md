@@ -90,9 +90,17 @@ python -m src.cli compare-tuning --dirs outputs/tuning/grid_* outputs/tuning/ran
 # evaluation, inference, explainability, comparison
 python -m src.cli evaluate --task classification --checkpoint outputs/runs/<run>/best.pt --split test
 python -m src.cli predict  --task classification --checkpoint outputs/runs/<run>/best.pt --image path/to/bird.jpg
+python -m src.cli predict  --task classification --checkpoint outputs/runs/<run>/best.pt --folder path/to/images --out preds.csv --topk 5
 python -m src.cli gradcam  --checkpoints outputs/runs/<scratch>/best.pt outputs/runs/<resnet50_ft>/best.pt --names scratch resnet50
 python -m src.cli compare  --runs outputs/runs/*
 ```
+
+Folder inference reads `.jpg`/`.jpeg`/`.png` files directly in the folder (case-insensitive)
+in filename order and writes `file`, `top1_class`, `top1_probability`, and
+`topk_classes` (a JSON list in probability order). `--topk` defaults to 5 and is
+capped at the number of classes; `--image` and `--folder` are mutually exclusive.
+Empty folders produce a header-only CSV. See [evaluation notes](docs/evaluation.md)
+for metric definitions and Grad-CAM.
 
 Trained checkpoints: Google Drive link — *to be added*.
 
