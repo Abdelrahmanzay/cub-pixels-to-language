@@ -6,6 +6,7 @@
     python -m src.cli train    --task classification --config configs/cls_resnet50_ft.yaml [--set train.lr=0.0003 ...]
     python -m src.cli evaluate --task classification --checkpoint outputs/runs/<run>/best.pt [--split test]
     python -m src.cli predict  --task classification --checkpoint <best.pt> --image path/to/bird.jpg
+    python -m src.cli predict  --task classification --checkpoint <best.pt> --folder images --out preds.csv
     python -m src.cli tune     --config configs/tune_resnet50.yaml --method grid|random|optuna
     python -m src.cli compare-tuning --dirs outputs/tuning/grid_* outputs/tuning/random_*
     python -m src.cli gradcam  --checkpoints <scratch best.pt> <transfer best.pt> --names scratch resnet50
@@ -54,10 +55,13 @@ def main(argv=None):
     s.add_argument("--num-workers", type=int, default=2)
     s.add_argument("--tta", action="store_true", help="horizontal-flip test-time augmentation")
 
-    s = sub.add_parser("predict", help="run inference on one image")
+    s = sub.add_parser("predict", help="run inference on one image or a folder")
     s.add_argument("--task", choices=TASKS, default="classification")
     s.add_argument("--checkpoint", required=True)
-    s.add_argument("--image", required=True)
+    source = s.add_mutually_exclusive_group(required=True)
+    source.add_argument("--image", help="one image to classify")
+    source.add_argument("--folder", help="folder of JPG/JPEG/PNG images (non-recursive)")
+    s.add_argument("--out", default="preds.csv", help="CSV destination for folder predictions")
     s.add_argument("--topk", type=int, default=5)
 
     s = sub.add_parser("tune", help="hyper-parameter search")
@@ -83,6 +87,8 @@ def main(argv=None):
     s.add_argument("--out", default="outputs/comparison")
 
     a = p.parse_args(argv)
+    if a.command == "predict" and a.topk < 1:
+        p.error("--topk must be at least 1")
 
     if a.command == "doctor":
         from src.doctor import run_doctor
@@ -107,8 +113,11 @@ def main(argv=None):
     elif a.command == "predict":
         if a.task != "classification":
             _milestone2(a.task)
-        from src.pipelines.classification import predict_image
-        predict_image(a.checkpoint, a.image, a.topk)
+        from src.pipelines.classification import predict_folder, predict_image
+        if a.folder is not None:
+            predict_folder(a.checkpoint, a.folder, a.out, a.topk)
+        else:
+            predict_image(a.checkpoint, a.image, a.topk)
     elif a.command == "tune":
         from src.training.tuning import run_search
         run_search(a.config, a.method, a.set, a.trials)

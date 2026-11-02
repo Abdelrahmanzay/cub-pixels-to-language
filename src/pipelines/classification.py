@@ -1,5 +1,5 @@
 """High-level classification workflows used by the CLI:
-train -> evaluate -> plots, standalone evaluation, single-image prediction,
+train -> evaluate -> plots, standalone evaluation, image/folder prediction,
 Grad-CAM, and run comparison."""
 from __future__ import annotations
 
@@ -135,6 +135,50 @@ def predict_image(ckpt_path, image_path, topk: int = 5) -> list[dict]:
     for r in out:
         print(f"{r['probability']:.3f}  {r['class']}")
     return out
+
+
+@torch.no_grad()
+def predict_folder(ckpt_path, folder, out_csv, topk: int = 5) -> pd.DataFrame:
+    """Predict direct JPG/JPEG/PNG children in filename order, in batches of 32.
+
+    CSV columns are file, top1_class, top1_probability, and topk_classes (a JSON
+    list of class names ranked by probability). Empty folders write a header.
+    As with predict_image, preprocessing uses the checkpoint's normalization and
+    evaluation transform. CUB normalization requires its saved stats.json.
+    """
+    if topk < 1:
+        raise ValueError("topk must be at least 1")
+    files = sorted(path for path in Path(folder).iterdir()
+                   if path.is_file() and path.suffix.lower() in {".jpg", ".jpeg", ".png"})
+    device = get_device()
+    model, ckpt = load_classifier(ckpt_path, device)
+    cfg = ckpt["config"]
+    class_names = ckpt["class_names"]
+    mean, std = get_normalization(cfg["data"]["normalization"], cfg["data"]["root"])
+    tf = build_eval_transform(cfg["data"]["image_size"], mean, std)
+    k = min(topk, len(class_names))
+
+    rows = []
+    for start in range(0, len(files), 32):
+        batch_files = files[start:start + 32]
+        images = []
+        for path in batch_files:
+            with Image.open(path) as image:
+                images.append(tf(image.convert("RGB")))
+        x = torch.stack(images).to(device)
+        top = model(x).softmax(1).topk(k, dim=1)
+        for path, indices, probabilities in zip(batch_files, top.indices.cpu(), top.values.cpu()):
+            names = [class_names[i] for i in indices.tolist()]
+            rows.append({"file": path.name, "top1_class": names[0],
+                         "top1_probability": float(probabilities[0]),
+                         "topk_classes": json.dumps(names, ensure_ascii=False)})
+
+    frame = pd.DataFrame(rows, columns=["file", "top1_class", "top1_probability", "topk_classes"])
+    out_csv = Path(out_csv)
+    out_csv.parent.mkdir(parents=True, exist_ok=True)
+    frame.to_csv(out_csv, index=False, encoding="utf-8")
+    print(f"saved {len(frame)} predictions to {out_csv}")
+    return frame
 
 
 def run_gradcam(ckpt_paths: list[str], out_dir: str, n_correct: int = 6, n_wrong: int = 6,
