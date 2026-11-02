@@ -1,0 +1,13 @@
+{
+  "split": "test",
+  "checkpoint": "outputs/runs/r50_loss_cosine_20261101-235930/best.pt",
+  "tta": "hflip",
+  "metrics": {
+    "accuracy": 0.8374180186399723,
+    "top5_accuracy": 0.9502934069727305,
+    "precision_macro": 0.8411049885338374,
+    "recall_macro": 0.8389669767903613,
+    "f1_macro": 0.8361292706218646,
+    "balanced_accuracy": 0.8389669767903613
+  }
+}
