@@ -124,8 +124,8 @@ python -m src.cli compare  --runs outputs/runs/*
 Folder inference reads the `.jpg/.jpeg/.png` files of a folder and writes `file`, `top1_class`,
 `top1_probability` and `topk_classes` to a CSV. See [docs/evaluation.md](docs/evaluation.md).
 
-**Trained checkpoints:** Google Drive — *link to be added*. Put a downloaded `best.pt`
-anywhere and pass it with `--checkpoint`; its config is stored inside the file.
+**Trained checkpoints:** [Google Drive folder](https://drive.google.com/drive/folders/1unNqlhEprTFObBeeLp3oaC3JL68MlUSe?usp=sharing) — one zip per Kaggle job; each run folder holds
+`best.pt`, its config, metrics and curves. Pass a `best.pt` with `--checkpoint`; its config is stored inside the file.
 
 ## 4. Tests
 
