@@ -56,7 +56,8 @@ Experiment tracking (W\&B): \url{https://forge.coreweave.com/wandb/23p0094-ain-s
 November 2026
 \end{titlepage}
 
-\tableofcontents
+\setcounter{tocdepth}{2}
+{\small\tableofcontents}
 \newpage
 
 %=====================================================================
@@ -492,11 +493,11 @@ test images are shown for the scratch CNN, ResNet-50 and ConvNeXt; images are se
 (6 random correct ones and its 6 most confident mistakes).
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.8\linewidth]{figs/gradcam_correct.png}
+\includegraphics[width=0.8\linewidth,height=0.80\textheight,keepaspectratio]{figs/gradcam_correct.png}
 \caption{Grad-CAM on images the scratch CNN classified correctly (green: correct, red: wrong; confidence in brackets).}\label{fig:gc1}
 \end{figure}
 \begin{figure}[H]\centering
-\includegraphics[width=0.8\linewidth]{figs/gradcam_wrong.png}
+\includegraphics[width=0.8\linewidth,height=0.80\textheight,keepaspectratio]{figs/gradcam_wrong.png}
 \caption{Grad-CAM on the scratch CNN's most confident mistakes.}\label{fig:gc2}
 \end{figure}
 
@@ -646,11 +647,11 @@ contains the exact configuration it was trained with.
 \toprule
 Member & Contribution\\
 \midrule
-Abdelrahman Mohamed Zayed & Repository and project structure, data pipeline, EDA, training/tuning pipeline, improvement experiments (bird crop, cosine loss, Mixup/CutMix, TTA, tuning v2), Kaggle and W\&B setup, report\\
-Yehya ElAbyad & Data module: tests for caption cleaning, tokenizer, vocabulary, transforms and dataset; data pipeline documentation (PR \#3)\\
-Ahmed ElSayed & Models: encoder and classifier contract tests (incl.\ cosine head and checkpoints), CPU encoder summary script, architecture documentation (PR \#2)\\
-Saeed Mohamed Negm & Training: config, scheduler/optimizer and tuning tests, training documentation\\
-Hassan Hazem & Evaluation: metric and Grad-CAM tests, batch (folder) inference feature, evaluation documentation (PR \#1)\\
+Abdelrahman Mohamed Zayed & Project structure, data pipeline and EDA, training and tuning pipeline, experiments, report\\
+Ahmed ElSayed & Model module: 23 automated tests of the encoder and classifier contracts (feature-map shapes for every encoder, frozen-encoder behaviour, discriminative learning rates, cosine head, checkpoint save/load), a reproducible encoder size/speed benchmark (\texttt{scripts/model\_summary.py}) and the model documentation (\texttt{docs/models.md}) --- PR \#2\\
+Saeed Mohamed Negm & Training module: tests for the configuration system, optimizer/scheduler and hyper-parameter search, and the training documentation\\
+Yehya ElAbyad & Data module: 20 automated tests for caption cleaning (including the corrupted-character and punctuation cases found in the EDA), tokenizer, vocabulary, augmentation transforms and dataset, and the data-pipeline documentation (\texttt{docs/data.md}) --- PR \#3\\
+Hassan Hazem & Evaluation module: 11 automated tests for the metrics (hand-computed cases) and Grad-CAM, batch (folder) inference with CSV export in the CLI, and the evaluation and Grad-CAM documentation (\texttt{docs/evaluation.md}) --- PR \#1\\
 \bottomrule
 \end{tabular}
 \end{table}
