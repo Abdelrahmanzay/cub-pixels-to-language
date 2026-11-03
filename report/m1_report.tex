@@ -440,15 +440,15 @@ and 4 final runs.
 
 \begin{figure}[H]\centering
 \shot{wandb_runs.png}{Screenshot: W\&B project page --- run table with all runs, their configs and test accuracy}
-\caption{W\&B: all runs of Milestone 1.}
+\caption{W\&B project table: all 53 runs of Milestone~1 with their tags and pinned columns for test accuracy, test accuracy with TTA and best validation accuracy (newest first: the final runs, then the improvement runs and tuning trials).}
 \end{figure}
 \begin{figure}[H]\centering
 \shot{wandb_charts.png}{Screenshot: W\&B charts --- val\_acc and train/val loss of the 7 training runs overlaid}
-\caption{W\&B: learning curves of the training runs.}
+\caption{W\&B: validation accuracy per epoch of the main runs --- the six Milestone-1 baselines, the final ConvNeXt-Tiny and the final 250-epoch scratch CNN (run names in the legend). The pretrained models (top-left) converge within a few epochs; the scratch CNNs climb slowly.}
 \end{figure}
 \begin{figure}[H]\centering
 \shot{wandb_tuning.png}{Screenshot: W\&B tuning group --- parallel-coordinates plot of lr, weight\_decay and val\_acc}
-\caption{W\&B: hyper-parameter search trials.}
+\caption{W\&B parallel-coordinates plot of all 26 tuning trials (tuning v1: grid and random on ResNet-50; tuning v2: random on ConvNeXt-T), coloured by best validation accuracy. Tuning-v1 trials all use the default backbone multiplier 0.1; the v2 trials with larger multipliers (0.25--0.3) are among the best.}
 \end{figure}
 
 %=====================================================================
