@@ -124,8 +124,19 @@ python -m src.cli compare  --runs outputs/runs/*
 Folder inference reads the `.jpg/.jpeg/.png` files of a folder and writes `file`, `top1_class`,
 `top1_probability` and `topk_classes` to a CSV. See [docs/evaluation.md](docs/evaluation.md).
 
-**Trained checkpoints:** [Google Drive folder](https://drive.google.com/drive/folders/1unNqlhEprTFObBeeLp3oaC3JL68MlUSe?usp=sharing) — one zip per Kaggle job; each run folder holds
-`best.pt`, its config, metrics and curves. Pass a `best.pt` with `--checkpoint`; its config is stored inside the file.
+**Trained checkpoints:** [Google Drive folder](https://drive.google.com/drive/folders/1unNqlhEprTFObBeeLp3oaC3JL68MlUSe?usp=sharing).
+Each zip contains `outputs/runs/<run>/` folders with `best.pt`, the run config, metrics and curves:
+
+| Zip | Runs |
+|---|---|
+| `1_baseline_models_M1.zip` | scratch CNN, scratch CNN without skips, ResNet-50 probe and fine-tune, EfficientNet-B0, ConvNeXt-T |
+| `2_resnet50_tuned_M1.zip` | ResNet-50 retrained with the tuning-v1 settings |
+| `3_convnext_improvement_models.zip` | ConvNeXt-T: bird crop, 384 px, crop + 384 px, cosine loss, Mixup/CutMix |
+| `4_augmentation_ablation_and_scratch_models.zip` | ResNet-50 augmentation/loss ablation, improved scratch CNNs |
+| `5_final_variants.zip` | final ConvNeXt-T with bird crop (cross-entropy and cosine loss) |
+| `6_final_models.zip` | **final model** (`final_full_ce`) and final scratch CNN (`scratch_final`) |
+
+Pass a `best.pt` with `--checkpoint`; its configuration is stored inside the file.
 
 ## 4. Tests
 
