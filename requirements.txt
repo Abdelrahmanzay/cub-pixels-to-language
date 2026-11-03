@@ -15,3 +15,4 @@ pyspellchecker>=0.8
 tabulate>=0.9
 wandb>=0.17
 optuna>=3.5
+pytest>=8.0
